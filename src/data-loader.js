@@ -1,12 +1,30 @@
 /**
-Logic to process input type:
+A. Logic to process input type:
 
 - When user upload data, we (1) store the raw user input at first
 - Then we (2) try to read it using different parsers (esp. json and csv)
     - If read successful, we (3) go process text
 	- If read unsuccessful, we (4) announce that data type can't be read, and (5) ask user to define separator
 
+ B. Format
+ |----------|   Time    |   Text    |----------|
+ 
+ C. Signatures
+ csv: text/csv
+ tsv: text/tab-separated-values
+ txt: text/plain
+ xls: application/vnd.ms-excel
+ xlsx: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+ 
+ PIPELINE:
+ - Load data
+ - Read data
+ - Show the data table
+ 
  */
+// input file specifications
+const fileType = ['csv', 'tsv', 'txt', 'xls', 'xlsx']	// file types
+const delimiter = [] // (for txt file)
 
 // load local file
 const filepicker = document.getElementById("filepicker");
@@ -39,7 +57,7 @@ function handleFiles(event) {
 		// 	.attr("height", "200");
 
 		console.log(e.target.result);
-		debugger
+		// debugger
 
 		// TODO: (2b-1) reading it
 		let data = d3.csvParse(e.target.result).map(d => d);
@@ -52,4 +70,8 @@ function handleFiles(event) {
 	console.log(file);
 
 	// TODO: (2b) Try to read input file using different parsers. List functions here.
+	
+	function csvRead(e){
+		return d3.csvParse(e.target.result).map(d => d);
+	}
 }
