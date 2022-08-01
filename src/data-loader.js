@@ -25,8 +25,18 @@ A. Logic to process input type:
 // input file specifications
 const delimiter = [] // (for txt file)
 
+// button to choose file
+const fileSelect = document.getElementById("fileSelect"),
+	fileElem = document.getElementById("fileElem");
+
+fileSelect.addEventListener("click", function (e) {
+	if (fileElem) {
+		fileElem.click();
+	}
+}, false);
+
 // load local file
-const filepicker = document.getElementById("uploadInput");
+const filepicker = document.getElementById("fileElem");
 const output = document.getElementById('output');
 // const outputTextContent = document.getElementById('fileContent');
 filepicker.addEventListener("change", handleFiles);
@@ -76,16 +86,22 @@ function handleFiles(event) {
 
 // TODO: (2b) Try to read input file using different parsers. List functions here.
 
-function csvRead(rawData){
+function csvRead(rawData, raw){
 	return d3.csvParse(rawData).map(d => {
+		if (raw){
+			return d;
+		}
 		return {
 			Time: d['Time'],
 			Text: d['Text'],
 		}
 	});
 }
-function tsvRead(rawData){
+function tsvRead(rawData, raw){
 	return d3.tsvParse(rawData).map(d => {
+		if (raw){
+			return d;
+		}
 		return {
 			Time: d['Time'],
 			Text: d['Text'],
