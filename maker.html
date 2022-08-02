@@ -54,27 +54,29 @@
             <header class="bg-dark py-5">
                 <div class="container px-5">
                     <div class="row gx-5 align-items-center justify-content-center">
-                        <div class="col-lg-8 col-xl-7 col-xxl-6">
+                        <div class="col-lg-8 col-xl-4 col-xxl-4">
                             <div class="my-5 text-center text-xl-start">
-                                <h1 class="display-5 fw-bolder text-white mb-2">Text Visualization Platform for
+								<h1 class="display-5 fw-bolder text-white mb-1">Text Visualization for
 									Topic Evolution</h1>
-                                <p class="lead fw-normal text-white-50 mb-4">Make sure your data file has a column
+                                <p class="lead fw-normal text-white-50 mb-4">Make sure your data file has columns
 									named <code>Time</code> and <code>Text</code>!
 								<br>Supported format: CSV, TSV.</p>
                                 <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
 									<input type="file" id="fileElem" style="display:none" accept=".csv, .tsv">
                                     <a class="btn btn-primary btn-lg px-4 me-sm-3" id="fileSelect">Select file</a>
-                                    <a class="btn btn-outline-light btn-lg px-4" href="#features" id="vis-trigger">Visualize!</a>
+                                    <a class="btn btn-outline-light btn-lg px-4" id="vis-trigger">Visualize!</a>
                                 </div>
 								<div id="alert-file" class="pt-3 text-white"></div>
                             </div>
                         </div>
-                        <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center">
-							<div class="bg-white img-fluid rounded-3 my-5" id="preview-data">
-<!--								<img src="assets/Eclipse-1s-200px.svg" />-->
-								<div class="loadingio-spinner-eclipse-tkisngtn2" id="loading"><div class="ldio-81lvt7kt8nr">
-									<div></div>
-								</div></div>
+                        <div class="col-xl-8 col-xxl-8 d-none d-xl-block text-center">
+							<div class="bg-white img-fluid rounded-3 my-5">
+								<div id="preview-data">
+									<div class="loadingio-spinner-eclipse-tkisngtn2" id="loading"><div class="ldio-81lvt7kt8nr">
+										<div></div>
+									</div></div>
+								</div>
+								<div class="p-2 bg-warning rounded-3" id="alert-field">Hi</div>
 							</div>
 						</div>
                     </div>
