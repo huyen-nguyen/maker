@@ -24,49 +24,81 @@ A. Logic to process input type:
  */
 // input file specifications
 const delimiter = [] // (for txt file)
+let fileLoadedFlag = false, fieldFlag = false;
+
+// ------- button to choose file, instead of the default -------
+const fileSelect = document.getElementById("fileSelect"),
+	fileElem = document.getElementById("fileElem");
+
+fileSelect.addEventListener("click", function (e) {
+	if (fileElem) {
+		fileElem.click();
+	}
+}, false);
 
 // load local file
-const filepicker = document.getElementById("uploadInput");
+const filepicker = document.getElementById("fileElem");
 const output = document.getElementById('output');
-// const outputTextContent = document.getElementById('fileContent');
+const visTrigger = document.getElementById('vis-trigger');
+const alertFile = document.getElementById('alert-file');
+const previewData = document.getElementById('preview-data');
+const loading = d3.select("#loading");
+const alertField = d3.select("#alert-field");
+
 filepicker.addEventListener("change", handleFiles);
 
-function handleFiles(event) {
-	const files = event.target.files;
+visTrigger.addEventListener("click", () => {
+	if (!fileLoadedFlag){
+		alertFile.innerHTML = '<span class="text-warning">Select a file first!</span>';
+		visTrigger.setAttribute("href", "#");
+		return
+	}
+	else if (!fieldFlag){
+		visTrigger.setAttribute("href", "#");
+		return
+	}
+	else {
+		visualize();
+		visTrigger.setAttribute("href", "#features");
+	}
+})
 
+function handleFiles(event) {
+	loading.style("display", "inline-block")
+	alertField.style("display", "none")
+	const files = event.target.files;
 	const file = files[0];
 	const signature = file.type;
-	let data, type;
+	let rawDataForRender, type;
 
-	output.textContent = '';
-	// output.textContent += `File name: ${file.name}: ${file.type || 'unknown'}\n`;
-	output.textContent += `File name: ${file.name}, size: ${updateSize(files) || 'unknown'}\n`;
+	alertFile.innerHTML = '';
+	alertFile.innerHTML += 'File name: ' + file.name + '<br/>' + 'Size: ' + (updateSize(files)? updateSize(files) : 'unknown');
+
+	d3.select("#jsonTable").remove();
 
 	// ---------
 	var reader = new FileReader();
 
 	reader.onload = function (e) {
-		// TODO: (1) store raw user input in `data`
+		// *store* raw user input in `data`
 		const rawData = e.target.result;
-		console.log(rawData);
+		fileLoadedFlag = true;  // load successfully
 
-		// TODO: (2b-1) reading it
+		// *read it*
 		// find file type based on signature
 		let typeIndex = Object.keys(fileSignature).indexOf(signature);
 
 		if (typeIndex >= 0){
 			type = fileSignature[signature];
-			console.log(type)
-			data = window[type + 'Read'](rawData);
-			console.log(data);
+			rawDataForRender = window[type + 'Read'](rawData, true);
 		}
 		else {
 			console.log("Wrong input type!")
 		}
 
-		// show data on screen
-
-
+		// render preview
+		createTable(rawDataForRender);
+		checkInputFields(rawDataForRender);
 
 		// ask user whether want to use this parsing of data or other specification
 	};
@@ -74,18 +106,24 @@ function handleFiles(event) {
 
 }
 
-// TODO: (2b) Try to read input file using different parsers. List functions here.
+// Read input file using different parsers. List functions here.
 
-function csvRead(rawData){
+function csvRead(rawData, raw){
 	return d3.csvParse(rawData).map(d => {
+		if (raw){
+			return d;
+		}
 		return {
 			Time: d['Time'],
 			Text: d['Text'],
 		}
 	});
 }
-function tsvRead(rawData){
+function tsvRead(rawData, raw){
 	return d3.tsvParse(rawData).map(d => {
+		if (raw){
+			return d;
+		}
 		return {
 			Time: d['Time'],
 			Text: d['Text'],
@@ -110,6 +148,45 @@ function updateSize(files) {
 	return sOutput;
 }
 
-function renderTabularData(){
+function visualize(){
 
+}
+
+
+function createTable(rawDataForRender){
+	loading.style("display", "none")
+
+	$('#preview-data')
+		.append('<table id="jsonTable" class="table table-striped"><thead' +
+		' class="thead-light"><tr></tr></thead><tbody></tbody></table>');
+
+	$.each(Object.keys(rawDataForRender[0]), function(index, key){
+		$('#jsonTable thead tr').append('<th>' + key + '</th>');
+	});
+	$.each(rawDataForRender, function(index, jsonObject){
+		if(Object.keys(jsonObject).length > 0){
+			var tableRow = '<tr>';
+			$.each(Object.keys(jsonObject), function(i, key){
+				tableRow += '<td>' + jsonObject[key] + '</td>';
+			});
+			tableRow += "</tr>";
+			$('#jsonTable tbody').append(tableRow);
+		}
+	});
+
+}
+
+function checkInputFields(rawDataForRender){
+	const fields = Object.keys(rawDataForRender[0]);
+	// case-sensitive
+	if (!fields.includes("Time") || !fields.includes("Text")){
+		fieldFlag = false;
+		alertField
+			.style("display", "block")
+			.html('<span>Missing columns named <code>Time</code> and/or' +
+			' <code>Text</code>! (case-sensitive)</span>')
+	}
+	else {
+		fieldFlag = true;
+	}
 }
