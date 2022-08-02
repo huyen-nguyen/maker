@@ -62,16 +62,20 @@
 									named <code>Time</code> and <code>Text</code>!
 								<br>Supported format: CSV, TSV.</p>
                                 <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
-									<input type="file" id="fileElem" style="display:none" accept=".csv, .tsv, .txt, .xls, .xlsx">
+									<input type="file" id="fileElem" style="display:none" accept=".csv, .tsv">
                                     <a class="btn btn-primary btn-lg px-4 me-sm-3" id="fileSelect">Select file</a>
-                                    <a class="btn btn-outline-light btn-lg px-4" href="#features">Learn More</a>
+                                    <a class="btn btn-outline-light btn-lg px-4" href="#features" id="vis-trigger">Visualize!</a>
                                 </div>
+								<div id="alert-file" class="pt-3 text-white"></div>
                             </div>
                         </div>
                         <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center">
-<!--							<output id="output"></output>-->
-							<div id="output" class="bg-light img-fluid rounded-3 my-5 preview-data"></div>
-<!--							<img class="img-fluid rounded-3 my-5" src="https://dummyimage.com/600x400/343a40/6c757d" alt="..." />-->
+							<div class="bg-white img-fluid rounded-3 my-5" id="preview-data">
+<!--								<img src="assets/Eclipse-1s-200px.svg" />-->
+								<div class="loadingio-spinner-eclipse-tkisngtn2" id="loading"><div class="ldio-81lvt7kt8nr">
+									<div></div>
+								</div></div>
+							</div>
 						</div>
                     </div>
                 </div>
@@ -240,7 +244,9 @@
         </footer>
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+		<!-- Core theme JS-->
 		<script src="src/data-loader.js"></script>
     </body>
 </html>

@@ -24,8 +24,9 @@ A. Logic to process input type:
  */
 // input file specifications
 const delimiter = [] // (for txt file)
+let fileLoadedFlag = false;
 
-// button to choose file
+// ------- button to choose file, instead of the default -------
 const fileSelect = document.getElementById("fileSelect"),
 	fileElem = document.getElementById("fileElem");
 
@@ -38,45 +39,60 @@ fileSelect.addEventListener("click", function (e) {
 // load local file
 const filepicker = document.getElementById("fileElem");
 const output = document.getElementById('output');
-// const outputTextContent = document.getElementById('fileContent');
+const visTrigger = document.getElementById('vis-trigger');
+const alertFile = document.getElementById('alert-file');
+const previewData = document.getElementById('preview-data');
+const loading = document.getElementById('loading')
+
 filepicker.addEventListener("change", handleFiles);
+filepicker.addEventListener("click", () => {
+});
+visTrigger.addEventListener("click", () => {
+	if (fileLoadedFlag){
+		visualize()
+	}
+	else {
+		alertFile.innerHTML = "Select a file first!";
+	}
+})
 
 function handleFiles(event) {
-	const files = event.target.files;
+	d3.select("#loading").style("display", "inline-block")
 
+	const files = event.target.files;
 	const file = files[0];
 	const signature = file.type;
-	let data, type;
+	let rawDataForRender, type;
 
-	output.textContent = '';
-	// output.textContent += `File name: ${file.name}: ${file.type || 'unknown'}\n`;
-	output.textContent += `File name: ${file.name}, size: ${updateSize(files) || 'unknown'}\n`;
+	alertFile.textContent = '';
+	alertFile.textContent += `File name: ${file.name} | size: ${updateSize(files) || 'unknown'}\n`;
+
+	d3.select("#jsonTable").remove();
 
 	// ---------
 	var reader = new FileReader();
 
 	reader.onload = function (e) {
-		// TODO: (1) store raw user input in `data`
+		// *store* raw user input in `data`
 		const rawData = e.target.result;
 		console.log(rawData);
+		fileLoadedFlag = true;
 
-		// TODO: (2b-1) reading it
+		// *read it*
 		// find file type based on signature
 		let typeIndex = Object.keys(fileSignature).indexOf(signature);
 
 		if (typeIndex >= 0){
 			type = fileSignature[signature];
-			console.log(type)
-			data = window[type + 'Read'](rawData);
-			console.log(data);
+			rawDataForRender = window[type + 'Read'](rawData, true);
 		}
 		else {
 			console.log("Wrong input type!")
 		}
 
-		// show data on screen
-
-
+		// render preview
+		createTable(rawDataForRender);
+		console.log(rawDataForRender);
 
 		// ask user whether want to use this parsing of data or other specification
 	};
@@ -84,7 +100,7 @@ function handleFiles(event) {
 
 }
 
-// TODO: (2b) Try to read input file using different parsers. List functions here.
+// Read input file using different parsers. List functions here.
 
 function csvRead(rawData, raw){
 	return d3.csvParse(rawData).map(d => {
@@ -128,4 +144,28 @@ function updateSize(files) {
 
 function renderTabularData(){
 
+}
+
+function visualize(){
+
+}
+
+function createTable(object){
+	d3.select("#loading").style("display", "none")
+	
+	$('#preview-data').append('<table id="jsonTable" class="table"><thead><tr></tr></thead><tbody></tbody></table>');
+
+	$.each(Object.keys(object[0]), function(index, key){
+		$('#jsonTable thead tr').append('<th>' + key + '</th>');
+	});
+	$.each(object, function(index, jsonObject){
+		if(Object.keys(jsonObject).length > 0){
+			var tableRow = '<tr>';
+			$.each(Object.keys(jsonObject), function(i, key){
+				tableRow += '<td>' + jsonObject[key] + '</td>';
+			});
+			tableRow += "</tr>";
+			$('#jsonTable tbody').append(tableRow);
+		}
+	});
 }
