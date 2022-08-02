@@ -100,7 +100,7 @@ function handleFiles(event) {
 		createTable(rawDataForRender);
 		checkInputFields(rawDataForRender);
 
-		// ask user whether want to use this parsing of data or other specification
+		// TODO: ask user whether want to use this parsing of data or other specification
 	};
 	reader.readAsText(file);
 
@@ -147,11 +147,6 @@ function updateSize(files) {
 	// end of optional code
 	return sOutput;
 }
-
-function visualize(){
-
-}
-
 
 function createTable(rawDataForRender){
 	loading.style("display", "none")
