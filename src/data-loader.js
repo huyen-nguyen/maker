@@ -25,7 +25,7 @@ A. Logic to process input type:
 // input file specifications
 const delimiter = [] // (for txt file)
 let fileLoadedFlag = false, fieldFlag = false;
-let dataForVis;
+let dataForNLP, dataForVis;
 
 // ------- button to choose file, instead of the default -------
 const fileSelect = document.getElementById("fileSelect"),
@@ -101,15 +101,14 @@ function handleFiles(event) {
 		createTable(rawDataForRender);
 		checkInputFields(rawDataForRender);
 
-		dataForVis = window[type + 'Read'](rawData, false);
-		console.log(dataForVis)
+		dataForNLP = window[type + 'Read'](rawData, false);
+		console.log(dataForNLP);
+		dataForVis = textProcessing(dataForNLP);
+		console.log(dataForVis);
 
 		// TODO: ask user whether want to use this parsing of data or other specification
 	};
 	reader.readAsText(file);
-
-
-
 }
 
 // Read input file using different parsers. List functions here.
