@@ -68,3 +68,8 @@ table td, table th{
 	height: 40px;
 	display: none;
 }
+
+/* visualizerrr */
+#canvas{
+	overflow-y: scroll;
+}

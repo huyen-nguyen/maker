@@ -25,6 +25,7 @@ A. Logic to process input type:
 // input file specifications
 const delimiter = [] // (for txt file)
 let fileLoadedFlag = false, fieldFlag = false;
+let dataForNLP, dataForVis;
 
 // ------- button to choose file, instead of the default -------
 const fileSelect = document.getElementById("fileSelect"),
@@ -58,7 +59,7 @@ visTrigger.addEventListener("click", () => {
 		return
 	}
 	else {
-		visualize();
+		visualize(dataForVis);
 		visTrigger.setAttribute("href", "#features");
 	}
 })
@@ -100,10 +101,12 @@ function handleFiles(event) {
 		createTable(rawDataForRender);
 		checkInputFields(rawDataForRender);
 
-		// ask user whether want to use this parsing of data or other specification
+		dataForNLP = window[type + 'Read'](rawData, false);
+		dataForVis = textProcessing(dataForNLP);
+
+		// TODO: ask user whether want to use this parsing of data or other specification
 	};
 	reader.readAsText(file);
-
 }
 
 // Read input file using different parsers. List functions here.
@@ -147,11 +150,6 @@ function updateSize(files) {
 	// end of optional code
 	return sOutput;
 }
-
-function visualize(){
-
-}
-
 
 function createTable(rawDataForRender){
 	loading.style("display", "none")
