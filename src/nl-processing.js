@@ -7,7 +7,7 @@ let text = "Netflix, Inc. is an American subscription streaming service and prod
 // let nouns = nlp(text).normalize({plurals:false, parentheses:true, possessives:true, honorifics:true}).nouns()
 //sort them by frequency
 // console.log(nouns.out('topk'))
-const topWords = 20;
+const topWords = 30;
 
 d3.tsv("data/maker_Cards_Fries_Text.tsv", function (err, dataForNLP){
 // d3.csv("data/maker_init-journal-data.csv", function (err, dataForNLP){
@@ -28,7 +28,16 @@ d3.tsv("data/maker_Cards_Fries_Text.tsv", function (err, dataForNLP){
 		let doc = nlp(textBlock)
 
 		doc.compute('root')
-		doc.terms().json()
+		const terms = doc.terms().json()
+
+		posCategories.forEach(category => {
+			obj.words[category] = d3.nest().key(d => (d.terms[0].root || d.terms[0].normal))
+				.entries(terms.filter(t => (t.terms[0].tags.includes(category))))
+				.sort((a,b) => b.values.length - a.values.length)
+				.splice(0, topWords)
+				.map(d => {return {text: d.key, frequency: d.values.length, topic: category}})
+		})
+
 	// 	const nouns = doc.nouns().out('freq')
 	// 	//
 	// 	const verbs = doc.verbs().out('freq')
@@ -39,11 +48,11 @@ d3.tsv("data/maker_Cards_Fries_Text.tsv", function (err, dataForNLP){
 		// posCategories.forEach(category => {
 		// 	obj.words[category] = eval(category + "s")
 		// })
-
-		debugger
 		dataForVis.push(obj);
 
 	})
+
+	console.log(dataForVis)
 	// verbs
 
 	// getting root words
@@ -54,7 +63,7 @@ d3.tsv("data/maker_Cards_Fries_Text.tsv", function (err, dataForNLP){
 	// })
 })
 
-function extractWords(){
+function textProcessing(){
 
 }
 
