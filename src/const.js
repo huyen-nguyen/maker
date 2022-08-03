@@ -6,3 +6,10 @@ const fileSignature = {
 	'application/vnd.ms-excel': 'xls',
 	'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'xlsx'
 }
+const puncMarkList = ['.', ',', '?', ';', '!', ':']
+
+const articleList = ['a ', 'an ', 'the '];
+
+const posCategories = ['noun', 'verb', 'adjective']
+
+const rename = (({normal: text, count: frequency, ...rest}, topic) => ({text, frequency, ...rest, topic}))

@@ -4,23 +4,54 @@ let text = "Netflix, Inc. is an American subscription streaming service and prod
 	" distribution" +
 	" deals as well as its own productions and library, known as Netflix Originals."
 //get all the nouns from the text
-let nouns = nlp(text).normalize({plurals:false, parentheses:true, possessives:true, honorifics:true}).nouns()
+// let nouns = nlp(text).normalize({plurals:false, parentheses:true, possessives:true, honorifics:true}).nouns()
 //sort them by frequency
-console.log(nouns.out('topk'))
+// console.log(nouns.out('topk'))
+const topWords = 20;
 
-d3.tsv("data/maker_Cards_Fries_Text.tsv", function (err, dataForVis){
-// d3.csv("data/maker_init-journal-data.csv", function (err, dataForVis){
-	console.log(dataForVis)
+d3.tsv("data/maker_Cards_Fries_Text.tsv", function (err, dataForNLP){
+// d3.csv("data/maker_init-journal-data.csv", function (err, dataForNLP){
 
 	// group by time
 	let dataGroupedByTime = d3.nest().key(d => d.Time)
-		.entries(dataForVis)
-		.map(d => {return {time: d.key, text_concated: d.values.map(d => d.Text).join(" ")}})
+		.entries(dataForNLP)
+		.map(d => {return {time: d.key, text_concated: d.values.map(d => d.Text).join(". ")}})
 
-	dataGroupedByTime.forEach(row => {
-		let text = row.Text;
-		// debugger
+	let dataForVis = [];
+	dataGroupedByTime.forEach(item => {
+	// let item = dataGroupedByTime[0]
+		let obj = {};
+		obj.date = item.time;
+		obj.words = {};
+
+		let textBlock = item.text_concated;
+		let doc = nlp(textBlock)
+
+		doc.compute('root')
+		doc.terms().json()
+	// 	const nouns = doc.nouns().out('freq')
+	// 	//
+	// 	const verbs = doc.verbs().out('freq')
+	// 	//
+	// 	const adjectives = makeUnique(doc.adjectives().out('freq'), "Adjective")
+
+
+		// posCategories.forEach(category => {
+		// 	obj.words[category] = eval(category + "s")
+		// })
+
+		debugger
+		dataForVis.push(obj);
+
 	})
+	// verbs
+
+	// getting root words
+
+	// doc.verbs().compute('root') //compute all roots
+	// doc.verbs().json().map(v => {
+	// 	return v.terms.map(t=>t.root || t.normal)
+	// })
 })
 
 function extractWords(){
@@ -35,6 +66,42 @@ function POS_tag(){
 
 }
 
+function removeEndingPuncMark(str){
+	for (let i = 0; i < puncMarkList.length; i++){
+		if (str.endsWith(puncMarkList[i])){
+			return str.slice(0, -1);
+		}
+	}
+	return str;
+}
+
+function makeUnique(array, topic){
+	// remove punctuation
+	// array.forEach(d => {
+	// 	d.normal = topic === "Noun" ? stripArticle(removeEndingPuncMark(d.normal)) : removeEndingPuncMark(d.normal)
+	// })
+
+	// combine, only search for duplicates in twice as big as top words picked
+	// return Array.from(array.splice(0, topWords*2)
+	// 	.reduce((m, {normal, count}) => m.set(normal, (m.get(normal) || 0) + count), new Map),
+	// 	([text, frequency]) => ({text, frequency, topic}))
+	// 	.slice(0, topWords);
+
+	array.splice(0, topWords)
+
+	return rename(array, topic)
+}
+
+function stripArticle(str){
+	for (let i = 0; i < articleList.length; i++){
+		if (str.startsWith(articleList[i])){
+			return str.substr(str.indexOf(" ") + 1);
+		}
+	}
+	return str;
+}
+
+// console.log(rename({normal: 1, count: 2}))
 /*
 * nlp(text).out('tags') // output of part-of-speech tags for each term
 * nlp(text).match('#Adjective').out('tags')

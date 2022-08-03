@@ -101,7 +101,7 @@ function handleFiles(event) {
 		createTable(rawDataForRender);
 		checkInputFields(rawDataForRender);
 
-		dataForVis = window[type + 'Read'](rawData, true);
+		dataForVis = window[type + 'Read'](rawData, false);
 		console.log(dataForVis)
 
 		// TODO: ask user whether want to use this parsing of data or other specification
