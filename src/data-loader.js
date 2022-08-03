@@ -102,9 +102,7 @@ function handleFiles(event) {
 		checkInputFields(rawDataForRender);
 
 		dataForNLP = window[type + 'Read'](rawData, false);
-		console.log(dataForNLP);
 		dataForVis = textProcessing(dataForNLP);
-		console.log(dataForVis);
 
 		// TODO: ask user whether want to use this parsing of data or other specification
 	};

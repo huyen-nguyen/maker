@@ -1,11 +1,11 @@
-const topWords = 30;
-
 function textProcessing(dataForNLP){
 	// group by time
 	let dataGroupedByTime = d3.nest().key(d => d.Time)
 		.entries(dataForNLP)
 		.map(d => {return {time: d.key, text_concated: d.values.map(d => d.Text).join(". ")}})
+		.sort((a,b) => +a.time - +b.time)
 
+	debugger
 	let dataForVis = [];
 
 	dataGroupedByTime.forEach(item => {
@@ -30,10 +30,6 @@ function textProcessing(dataForNLP){
 		dataForVis.push(obj);
 	})
 	return dataForVis;
-}
-
-function visualize(dataForVis){
-	console.log(dataForVis)
 }
 
 function POS_tag(){
