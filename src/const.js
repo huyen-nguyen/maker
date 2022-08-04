@@ -14,4 +14,4 @@ const posCategories = ['Noun', 'Verb', 'Adjective']
 
 const rename = (({normal: text, count: frequency, ...rest}, topic) => ({text, frequency, ...rest, topic}))
 
-const topWords = 20;
+const topWords = 40;
