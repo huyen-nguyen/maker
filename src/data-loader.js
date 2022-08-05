@@ -27,6 +27,7 @@ const delimiter = [] // (for txt file)
 let fileLoadedFlag = false, fieldFlag = false;
 let newDataLoadFlag = false; // reset on loading new data
 let dataForNLP, dataForVis;
+let categoryType = "pos"
 
 // ------- button to choose file, instead of the default -------
 const fileSelect = document.getElementById("fileSelect"),
@@ -122,6 +123,7 @@ function handleSamples(path) {
 	loading.style("display", "inline-block")
 	alertField.style("display", "none")
 	d3.select("#jsonTable").remove();
+	widthUpdateFlag = false; heightUpdateFlag = false;  // reset flags
 
 	if (path.toLowerCase().endsWith("csv")){
 		d3.csv(path, function (err, rawDataForRender){

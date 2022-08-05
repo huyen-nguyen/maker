@@ -101,13 +101,27 @@
 				</div>
 			</div>
 			<div class="row my-5">
-				<div class="col-sm" id="panel-1">
-
+				<div class="col-sm panel" id="panel-1" style="display: none">
+					<h5 class="mb-4">Visualization options</h5>
 				</div>
-				<div class="col-sm" style="text-align: center" id="panel-2">
-
+				<div class="col-sm panel" id="panel-2" style="display: none">
+					<h5 class="mb-4">Natural Language Processing options</h5>
+					<form id="form">
+						<input type="radio" name="stack" value="pos" checked="checked"> Part-of-speech (POS) Tags<br>
+						<ul>
+							<li>Noun</li>
+							<li>Verb</li>
+							<li>Adjective</li>
+						</ul>
+						<input type="radio" name="stack" value="ner"> Named-entity Recognition (NER)<br>
+						<ul>
+							<li>Person</li>
+							<li>Place</li>
+							<li>Organization</li>
+						</ul>
+					</form>
 				</div>
-				<div class="col-sm" style="text-align: end;" id="panel-3">
+				<div class="col-sm panel" style="text-align: end;" id="panel-3">
 
 				</div>
 			</div>

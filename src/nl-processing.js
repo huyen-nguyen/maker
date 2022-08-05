@@ -2,13 +2,25 @@ const excludeCategories = {
 	Noun: ['Pronoun', 'Possessive'],
 	Verb: ['Modal', 'Copula', 'Auxiliary'],
 	Adjective: [],
+	Person: [],
+	Place: [],
+	Organization: []
 }
 
 const excludeWords = {
 	Noun: ['thing'],
 	Verb: ['be', 'do', 'have'],
 	Adjective: [],
+	Person: [],
+	Place: [],
+	Organization: ['&']
 }
+
+d3.selectAll(("input[name='stack']")).on("change", function(){
+	categoryType = this.value
+	dataForVis = textProcessing(dataForNLP);
+	visualize(dataForVis);
+});
 
 function textProcessing(dataForNLP){
 	// group by time
@@ -30,7 +42,7 @@ function textProcessing(dataForNLP){
 		doc.compute('root')
 		const terms = doc.terms().json()
 
-		posCategories.forEach(category => {
+		eval(categoryType + "Categories").forEach(category => {
 			obj.words[category] = d3.nest().key(d => (d.terms[0].root || d.terms[0].normal))
 				.entries(terms
 					.filter(t => (t.terms[0].tags.includes(category)) && // get only the category
@@ -47,10 +59,6 @@ function textProcessing(dataForNLP){
 		dataForVis.push(obj);
 	})
 	return dataForVis;
-}
-
-function POS_tag(){
-
 }
 
 function removeEndingPuncMark(str){ // no need for this function, now we take either terms from `text` or `normal` fields
