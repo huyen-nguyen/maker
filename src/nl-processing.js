@@ -1,3 +1,9 @@
+const excludeCategories = {
+	Noun: ['Pronoun', 'Possessive'],
+	Verb: ['Modal', 'Copula', 'Auxiliary'],
+	Adjective: [],
+}
+
 function textProcessing(dataForNLP){
 	// group by time
 	let dataGroupedByTime = d3.nest().key(d => d.Time)
@@ -5,10 +11,9 @@ function textProcessing(dataForNLP){
 		.map(d => {return {time: d.key, text_concated: d.values.map(d => d.Text).join(". ")}})
 		.sort((a,b) => +a.time - +b.time)
 
-	debugger
 	let dataForVis = [];
 
-	dataGroupedByTime.forEach(item => {
+	dataGroupedByTime.forEach((item, index) => {
 		let obj = {};  // obj is the desired WS format
 		obj.date = item.time;
 		obj.words = {};
@@ -21,12 +26,16 @@ function textProcessing(dataForNLP){
 
 		posCategories.forEach(category => {
 			obj.words[category] = d3.nest().key(d => (d.terms[0].root || d.terms[0].normal))
-				.entries(terms.filter(t => (t.terms[0].tags.includes(category))))
+				.entries(terms
+					.filter(t => (t.terms[0].tags.includes(category))) // get only the category
+					.filter(t => excludeCategories[category]       // exclude the nonsense from `excludeCategories`
+						.filter(c => t.terms[0].tags.includes(c)).length === 0))
 				.sort((a,b) => b.values.length - a.values.length)
 				.splice(0, topWords)
-				.map(d => {return {text: d.key, frequency: d.values.length, topic: category}})
+				.map(d => {return {text: d.key, frequency: d.values.length, topic: category, id: d.key + '_' + category + '_' + index}})
 		})
 
+		console.log(terms)
 		dataForVis.push(obj);
 	})
 	return dataForVis;

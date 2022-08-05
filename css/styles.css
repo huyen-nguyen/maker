@@ -6,9 +6,6 @@
 	/*position: fixed;*/
 }
 
-/* table */
-/*tr:nth-child(even) td {background: #f2f2f2}*/
-
 table{
 	border-collapse: collapse;
 }
@@ -72,4 +69,8 @@ table td, table th{
 /* visualizerrr */
 #canvas{
 	overflow-y: scroll;
+}
+
+#vis-trigger{
+	width: 87%
 }
