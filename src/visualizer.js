@@ -9,8 +9,8 @@ function visualize(dataForVis){
 
 	let config = {
 		topWord: 40,
-		minFont: 10,
-		maxFont: 20,
+		minFont: 12,
+		maxFont: 25,
 		tickFont: 12,
 		legendFont: 12,
 		curve: d3.curveMonotoneX
