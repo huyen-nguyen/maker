@@ -45,8 +45,16 @@ const alertFile = document.getElementById('alert-file');
 const previewData = document.getElementById('preview-data');
 const loading = d3.select("#loading");
 const alertField = d3.select("#alert-field");
+const sample_fries = d3.select("#pathway")
+	.on("click", function (){
+		handleSamples("data/maker_Cards_Fries_Text.tsv")
+	});
+const sample_education = d3.select("#education")
+	.on("click", function (){
+		handleSamples("data/maker_init-journal-data.csv")
+	});
 
-filepicker.addEventListener("change", handleFiles);
+filepicker.addEventListener("change", handleFiles, false);
 
 visTrigger.addEventListener("click", () => {
 	if (!fileLoadedFlag){
@@ -67,13 +75,13 @@ visTrigger.addEventListener("click", () => {
 function handleFiles(event) {
 	loading.style("display", "inline-block")
 	alertField.style("display", "none")
-	const files = event.target.files;
-	const file = files[0];
+
+	const file =  event.target.files[0];
 	const signature = file.type;
 	let rawDataForRender, type;
 
 	alertFile.innerHTML = '';
-	alertFile.innerHTML += 'File name: ' + file.name + '<br/>' + 'Size: ' + (updateSize(files)? updateSize(files) : 'unknown');
+	alertFile.innerHTML += 'File name: ' + file.name + '<br/>' + 'Size: ' + (updateSize(file)? updateSize(file) : 'unknown');
 
 	d3.select("#jsonTable").remove();
 
@@ -109,6 +117,44 @@ function handleFiles(event) {
 	reader.readAsText(file);
 }
 
+function handleSamples(path) {
+	loading.style("display", "inline-block")
+	alertField.style("display", "none")
+	d3.select("#jsonTable").remove();
+
+	if (path.toLowerCase().endsWith("csv")){
+		d3.csv(path, function (err, rawDataForRender){
+			alertFile.innerHTML = '';
+			alertFile.innerHTML += 'File name: maker_init-journal-data.csv' + '<br/>' + 'Size: 192.012 KiB (196620 bytes)';
+			doSamples(rawDataForRender)
+		})
+	}
+	else {
+		d3.tsv(path, function (err, rawDataForRender){
+			alertFile.innerHTML = '';
+			alertFile.innerHTML += 'File name: maker_Cards_Fries_Text.tsv' + '<br/>' + 'Size: 1.434 MiB (1503230 bytes)';
+			doSamples(rawDataForRender)
+		})
+	}
+
+	function doSamples(rawDataForRender){
+		fileLoadedFlag = true;  // load successfully
+		// render preview
+		createTable(rawDataForRender);
+		checkInputFields(rawDataForRender);
+
+		dataForNLP = rawDataForRender.map(d => {
+			return {
+				Time: d['Time'],
+				Text: d['Text'],
+			}
+		});
+		dataForVis = textProcessing(dataForNLP);
+	}
+}
+
+
+
 // Read input file using different parsers. List functions here.
 
 function csvRead(rawData, raw){
@@ -134,12 +180,11 @@ function tsvRead(rawData, raw){
 	});
 }
 
-function updateSize(files) {
+function updateSize(file) {
 	let nBytes = 0,
-		oFiles = files,
-		nFiles = oFiles.length;
+		nFiles = 1;
 	for (let nFileId = 0; nFileId < nFiles; nFileId++) {
-		nBytes += oFiles[nFileId].size;
+		nBytes += file.size;
 	}
 	let sOutput = nBytes + " bytes";
 	// optional code for multiples approximation
