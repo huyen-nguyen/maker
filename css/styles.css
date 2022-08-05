@@ -69,6 +69,7 @@ table td, table th{
 
 #vis-trigger{
 	width: 87%;
+	max-width: 400px;
 }
 #vis-trigger > p{
 	margin-bottom: 0.2rem !important;
@@ -110,5 +111,12 @@ table td, table th{
 
 /* stage 2 --- visualizerrr */
 #canvas{
-	overflow-y: scroll;
+	/*max-width: 1500px;*/
+	/*overflow-y: scroll;*/
+}
+
+#canvasContainer{
+	display:flex;
+	align-items:center;
+	justify-content:center;
 }
