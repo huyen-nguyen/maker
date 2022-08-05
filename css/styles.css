@@ -1,7 +1,7 @@
 /* stage-1 */
 #preview-data{
 	width: 800px;
-	height: 450px;
+	height: 400px;
 	overflow-y: scroll;
 	/*position: fixed;*/
 }
@@ -66,11 +66,49 @@ table td, table th{
 	display: none;
 }
 
-/* visualizerrr */
-#canvas{
-	overflow-y: scroll;
-}
 
 #vis-trigger{
-	width: 87%
+	width: 87%;
+}
+#vis-trigger > p{
+	margin-bottom: 0.2rem !important;
+}
+
+.buttonWrapper {
+	margin: 50px;
+}
+
+.button {
+	width: 350px;
+	margin: 0 auto;
+	padding: 5px 10px;
+	cursor: pointer;
+}
+.button12 {
+	background: #4DD9B2;
+	position: relative;
+	transition: all 0.25s ease-in-out;
+}
+.button12:after {
+	content: "";
+	background: #4DD9B2;
+	height: 20px;
+	width: 20px;
+	position: absolute;
+	top: 74%;
+	left: 46%;
+	transform: rotate(45deg);
+	transition: all 0.25s ease-in-out;
+}
+.button12:hover {
+	background: #b6efdf;
+}
+.button12:hover:after {
+	transform: rotate(135deg);
+}
+
+
+/* stage 2 --- visualizerrr */
+#canvas{
+	overflow-y: scroll;
 }

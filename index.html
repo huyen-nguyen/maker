@@ -48,9 +48,9 @@
 						<img src="assets/Mellow.png" width="310" style="margin-left: -180px"/>
 						<h1 class="display-5 fw-bolder text-white mb-1">Visualization for
 							Topic Evolution</h1>
-						<p class="lead fw-normal text-white-50 mb-4">Make sure your data file has columns
-							named <code>Time</code> and <code>Text</code>!
-							<br>Supported format: CSV, TSV.</p>
+						<p class="lead fw-normal text-white-50 my-4">Make sure your data file has columns
+							named <code>Time</code> and <code>Text</code>!</p>
+
 						<div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
 							<input type="file" id="fileElem" style="display:none" accept=".csv, .tsv">
 						</div>
@@ -70,20 +70,22 @@
 									</div>
 								</div>
 							</div>
-							<a class="btn btn-light btn-lg px-4" id="vis-trigger">Visualize!</a>
+							<a class="btn button button12 px-4 m-0" id="vis-trigger"><p>Visualize!</p></a>
+
 						</div>
-						<div id="alert-file" class="pt-3 text-white"></div>
+						<div id="alert-file" class="pt-3 text-white"><span>&zwnj;<br>&zwnj;</span></div>
 					</div>
 				</div>
 				<div class="col-xl-8 col-xxl-8 d-none d-xl-block text-center">
-					<div class="bg-white img-fluid rounded-3 my-5">
+					<div class="bg-white img-fluid rounded-3 mt-3 mb-3">
 						<div id="preview-data">
 							<div class="loadingio-spinner-eclipse-tkisngtn2" id="loading"><div class="ldio-81lvt7kt8nr">
 								<div></div>
 							</div></div>
 						</div>
-						<div class="p-2 bg-warning rounded-3" id="alert-field">Hi</div>
+						<div class="p-2 bg-warning rounded-3" id="alert-field"></div>
 					</div>
+					<div class="text-white-50 mb-2" style="float: left">Supported format: CSV, TSV.</div>
 				</div>
 			</div>
 		</div>
@@ -92,7 +94,7 @@
 	<section class="py-5" id="features">
 		<div class="container px-5 my-5">
 			<div class="row gx-5">
-				<div class="col-lg-2 mb-5 mb-lg-0"><h2 class="fw-bolder mb-0">WordStream</h2></div>
+				<div class="col-lg-2 mb-5 mb-lg-3"><h2 class="fw-bolder mb-3">WordStream</h2></div>
 				<div class="col-lg-10">
 					<div id="canvas">
 					</div>

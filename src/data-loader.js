@@ -58,7 +58,7 @@ filepicker.addEventListener("change", handleFiles, false);
 
 visTrigger.addEventListener("click", () => {
 	if (!fileLoadedFlag){
-		alertFile.innerHTML = '<span class="text-warning">Select a file first!</span>';
+		alertFile.innerHTML = '<span class="text-warning">Select a file first!<br>&zwnj;</span>';
 		visTrigger.setAttribute("href", "#");
 		return
 	}
@@ -81,7 +81,7 @@ function handleFiles(event) {
 	let rawDataForRender, type;
 
 	alertFile.innerHTML = '';
-	alertFile.innerHTML += 'File name: ' + file.name + '<br/>' + 'Size: ' + (updateSize(file)? updateSize(file) : 'unknown');
+	alertFile.innerHTML += '<span>File name: ' + file.name + '<br/>' + 'Size: ' + (updateSize(file)? updateSize(file) : 'unknown') + '</span>';
 
 	d3.select("#jsonTable").remove();
 
@@ -125,14 +125,14 @@ function handleSamples(path) {
 	if (path.toLowerCase().endsWith("csv")){
 		d3.csv(path, function (err, rawDataForRender){
 			alertFile.innerHTML = '';
-			alertFile.innerHTML += 'File name: maker_init-journal-data.csv' + '<br/>' + 'Size: 192.012 KiB (196620 bytes)';
+			alertFile.innerHTML += '<span>File name: maker_init-journal-data.csv' + '<br/>' + 'Size: 192.012 KiB (196620 bytes)</span>';
 			doSamples(rawDataForRender)
 		})
 	}
 	else {
 		d3.tsv(path, function (err, rawDataForRender){
 			alertFile.innerHTML = '';
-			alertFile.innerHTML += 'File name: maker_Cards_Fries_Text.tsv' + '<br/>' + 'Size: 1.434 MiB (1503230 bytes)';
+			alertFile.innerHTML += '<span>File name: maker_Cards_Fries_Text.tsv' + '<br/>' + 'Size: 1.434 MiB (1503230 bytes)</span>';
 			doSamples(rawDataForRender)
 		})
 	}
