@@ -76,7 +76,7 @@ visTrigger.addEventListener("click", () => {
 	}
 	else {
 		visualize(dataForVis);
-		visTrigger.setAttribute("href", "#features");
+		visTrigger.setAttribute("href", "#wordstream");
 	}
 })
 
