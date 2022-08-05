@@ -28,6 +28,7 @@ let fileLoadedFlag = false, fieldFlag = false;
 let newDataLoadFlag = false; // reset on loading new data
 let dataForNLP, dataForVis;
 let categoryType = "pos"
+let repType = 'frequency'
 
 // ------- button to choose file, instead of the default -------
 const fileSelect = document.getElementById("fileSelect"),
@@ -51,9 +52,14 @@ const sample_fries = d3.select("#pathway")
 	.on("click", function (){
 		handleSamples("data/maker_Cards_Fries_Text.tsv")
 	});
-const sample_education = d3.select("#education")
+	d3.select("#education")
 	.on("click", function (){
 		handleSamples("data/maker_init-journal-data.csv")
+	});
+
+	const sample_education = d3.select("#vast")
+	.on("click", function (){
+		handleSamples("data/evenyint.csv")
 	});
 
 filepicker.addEventListener("change", handleFiles, false);
