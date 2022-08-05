@@ -67,6 +67,7 @@
 									<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 										<a class="dropdown-item" href="#" id="education">Education Assessment</a>
 										<a class="dropdown-item" href="#" id="pathway">Protein Pathway</a>
+										<a class="dropdown-item" href="#" id="vast">VAST Challenge Data</a>
 									</div>
 								</div>
 							</div>
@@ -121,8 +122,14 @@
 						</ul>
 					</form>
 				</div>
-				<div class="col-sm panel" style="text-align: end;" id="panel-3">
+				<div class="col-sm panel" id="panel-3" style="display: none">
+					<h5 class="mb-4">Representation metrics</h5>
+					<form id="form2">
+						<input class="mb-3" type="radio" name="metric" value="frequency" checked="checked"> Frequency<br>
 
+						<input class="mb-3" type="radio" name="metric" value="sudden"> Sudden Attention<br>
+
+					</form>
 				</div>
 			</div>
 		</div>

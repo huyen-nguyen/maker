@@ -40,6 +40,8 @@ function visualize(dataForVis){
 	}
 }
 
+
+
 function panelForUpdate(){
 	// need to create a grid here
 	d3.select("#panel-1").style("display", "block")
@@ -84,7 +86,7 @@ function panelForUpdate(){
 		.attr("id", "topWordValue")
 		.attr("type", "number")
 		.attr("value", config.topWord)
-		.attr("step", "1")
+		.attr("step", "5")
 		.on("change", function () {
 			config.topWord = this.value;
 			visualize(dataForVis)
@@ -135,4 +137,49 @@ function panelForUpdate(){
 	// NLP stuff
 
 	d3.select("#panel-2").style("display", "block")
+
+	d3.selectAll(("input[name='stack']")).on("change", function(){
+		categoryType = this.value
+		dataForVis = textProcessing(dataForNLP);
+		visualize(dataForVis);
+	});
+
+	d3.select("#panel-3").style("display", "block")
+
+	d3.selectAll(("input[name='metric']")).on("change", function(){
+		repType = this.value
+		if (repType === 'frequency'){
+			dataForVis = textProcessing(dataForNLP);
+		}
+		else if(repType === 'sudden'){
+			dataForVis = getSuddenData(dataForVis)
+		}
+
+		visualize(dataForVis);
+	});
+}
+
+function getSuddenData(data){
+	eval(categoryType + "Categories").forEach(c => {
+		data[0].words[c].forEach(w => {
+			w.frequencyOG = w.frequency
+			w.frequency = (w.frequencyOG+1)     // frequency = sudden;
+		})
+
+		for (let i = 1; i < data.length; i++){
+			data[i].words[c].forEach(w => {
+				w.frequencyOG = w.frequency
+
+				// find the prev existent
+				let prev = data[i-1].words[c].find(sword => sword.text === w.text);
+				if (prev){
+					w.frequency = (w.frequencyOG+1)/(prev.frequencyOG+1)
+				}
+				else{
+					w.frequency = (w.frequencyOG+1)
+				}
+			})
+		}
+	})
+	return data
 }

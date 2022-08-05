@@ -16,12 +16,6 @@ const excludeWords = {
 	Organization: ['&']
 }
 
-d3.selectAll(("input[name='stack']")).on("change", function(){
-	categoryType = this.value
-	dataForVis = textProcessing(dataForNLP);
-	visualize(dataForVis);
-});
-
 function textProcessing(dataForNLP){
 	// group by time
 	let dataGroupedByTime = d3.nest().key(d => d.Time)
@@ -57,7 +51,13 @@ function textProcessing(dataForNLP){
 		})
 
 		dataForVis.push(obj);
+
 	})
+
+	if (repType === 'sudden'){
+		getSuddenData(dataForVis)
+	}
+
 	return dataForVis;
 }
 
