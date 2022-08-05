@@ -4,6 +4,12 @@ const excludeCategories = {
 	Adjective: [],
 }
 
+const excludeWords = {
+	Noun: ['thing'],
+	Verb: ['be', 'do', 'have'],
+	Adjective: [],
+}
+
 function textProcessing(dataForNLP){
 	// group by time
 	let dataGroupedByTime = d3.nest().key(d => d.Time)
@@ -27,15 +33,17 @@ function textProcessing(dataForNLP){
 		posCategories.forEach(category => {
 			obj.words[category] = d3.nest().key(d => (d.terms[0].root || d.terms[0].normal))
 				.entries(terms
-					.filter(t => (t.terms[0].tags.includes(category))) // get only the category
-					.filter(t => excludeCategories[category]       // exclude the nonsense from `excludeCategories`
-						.filter(c => t.terms[0].tags.includes(c)).length === 0))
+					.filter(t => (t.terms[0].tags.includes(category)) && // get only the category
+						excludeCategories[category].filter(c => t.terms[0].tags.includes(c)).length === 0 && // exclude the nonsense from `excludeCategories`
+						excludeWords[category].filter(w => w === (t.terms[0].root || t.terms[0].normal)).length === 0 && // exclude the word itself
+						(t.terms[0].normal !== '') // exclude empty word -- this freaking bug costs me my nerves
+					)
+				)
 				.sort((a,b) => b.values.length - a.values.length)
 				.splice(0, topWords)
 				.map(d => {return {text: d.key, frequency: d.values.length, topic: category, id: d.key + '_' + category + '_' + index}})
 		})
 
-		console.log(terms)
 		dataForVis.push(obj);
 	})
 	return dataForVis;
