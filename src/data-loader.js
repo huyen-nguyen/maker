@@ -25,6 +25,7 @@ A. Logic to process input type:
 // input file specifications
 const delimiter = [] // (for txt file)
 let fileLoadedFlag = false, fieldFlag = false;
+let newDataLoadFlag = false; // reset on loading new data
 let dataForNLP, dataForVis;
 
 // ------- button to choose file, instead of the default -------
@@ -92,7 +93,7 @@ function handleFiles(event) {
 		// *store* raw user input in `data`
 		const rawData = e.target.result;
 		fileLoadedFlag = true;  // load successfully
-
+		widthUpdateFlag = false; heightUpdateFlag = false;  // reset flags
 		// *read it*
 		// find file type based on signature
 		let typeIndex = Object.keys(fileSignature).indexOf(signature);
