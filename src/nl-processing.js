@@ -34,6 +34,7 @@ function textProcessing(dataForNLP){
 		let doc = nlp(textBlock)
 
 		doc.compute('root')
+		doc.compute('tfidf')
 		const terms = doc.terms().json()
 
 		eval(categoryType + "Categories").forEach(category => {
