@@ -34,6 +34,7 @@ function textProcessing(dataForNLP){
 		let doc = nlp(textBlock)
 
 		doc.compute('root')
+		doc.compute('tfidf')
 		const terms = doc.terms().json()
 
 		eval(categoryType + "Categories").forEach(category => {
@@ -47,16 +48,16 @@ function textProcessing(dataForNLP){
 				)
 				.sort((a,b) => b.values.length - a.values.length)
 				.splice(0, topWords)
-				.map(d => {return {text: d.key, frequency: d.values.length, topic: category, id: d.key + '_' + category + '_' + index}})
+				.map(d => {return {
+					text: d.key,
+					frequency: d.values.length,
+					tfidf: d.values[0].terms[0].tfidf*10,
+					topic: category,
+					id: d.key + '_' + category + '_' + index}})
 		})
 
 		dataForVis.push(obj);
-
 	})
-
-	if (repType === 'sudden'){
-		getSuddenData(dataForVis)
-	}
 
 	return dataForVis;
 }

@@ -16,7 +16,9 @@
 	<link href="css/styles.css" rel="stylesheet" />
 	<!-- Libraries -->
 	<script src="https://d3js.org/d3.v4.min.js"></script>
-	<script src="https://unpkg.com/compromise"></script>
+	<script src='https://unpkg.com/compromise'></script>
+	<script src='https://unpkg.com/compromise-stats'></script>
+	<script defer src='lib/bundle.js'></script>
 	<script src="lib/wordstream.js"></script>
 	<script src="src/const.js"></script>
 </head>
@@ -64,7 +66,6 @@
 									<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 										<a class="dropdown-item" href="#" id="education">Education Assessment</a>
 										<a class="dropdown-item" href="#" id="pathway">Protein Pathway</a>
-										<a class="dropdown-item" href="#" id="vast">VAST Challenge Data</a>
 									</div>
 								</div>
 							</div>
@@ -89,7 +90,7 @@
 		</div>
 	</header>
 	<!-- Features section-->
-	<section class="py-5" id="features">
+	<section class="py-5" id="wordstream">
 		<div class="container px-5 my-5" id="stage-2">
 			<div class="row gx-5" >
 				<div class="col-lg-2 mb-5 mb-lg-3"><h2 class="fw-bolder mb-3">WordStream</h2></div>
@@ -125,6 +126,8 @@
 						<input class="mb-3" type="radio" name="metric" value="frequency" checked="checked"> Frequency<br>
 
 						<input class="mb-3" type="radio" name="metric" value="sudden"> Sudden Attention<br>
+
+						<input class="mb-3" type="radio" name="metric" value="tfidf"> TF-IDF<br>
 
 					</form>
 				</div>

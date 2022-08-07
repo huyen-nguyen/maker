@@ -138,7 +138,7 @@ function panelForUpdate(){
 
 	d3.select("#panel-2").style("display", "block")
 
-	d3.selectAll(("input[name='stack']")).on("change", function(){
+	d3.selectAll(("input[name='stack']")).on("change", function(){      // different NLP engine
 		categoryType = this.value
 		dataForVis = textProcessing(dataForNLP);
 		visualize(dataForVis);
@@ -146,20 +146,25 @@ function panelForUpdate(){
 
 	d3.select("#panel-3").style("display", "block")
 
-	d3.selectAll(("input[name='metric']")).on("change", function(){
+	d3.selectAll(("input[name='metric']")).on("change", function(){     // different modes of representation
 		repType = this.value
+		let newData;
 		if (repType === 'frequency'){
-			dataForVis = textProcessing(dataForNLP);
+			newData = textProcessing(dataForNLP);
 		}
 		else if(repType === 'sudden'){
-			dataForVis = getSuddenData(dataForVis)
+			newData = getSuddenData(dataForVis)
+		}
+		else if (repType === 'tfidf'){
+			newData = getTFIDFData(dataForVis)
 		}
 
-		visualize(dataForVis);
+		visualize(newData);
 	});
 }
 
-function getSuddenData(data){
+function getSuddenData(dataOG){
+	let data = JSON.parse(JSON.stringify(dataOG));
 	eval(categoryType + "Categories").forEach(c => {
 		data[0].words[c].forEach(w => {
 			w.frequencyOG = w.frequency
@@ -178,6 +183,19 @@ function getSuddenData(data){
 				else{
 					w.frequency = (w.frequencyOG+1)
 				}
+			})
+		}
+	})
+	return data
+}
+
+function getTFIDFData(dataOG){
+	let data = JSON.parse(JSON.stringify(dataOG));
+	eval(categoryType + "Categories").forEach(c => {
+		for (let i = 0; i < data.length; i++){
+			data[i].words[c].forEach(w => {
+				w.frequencyOG = w.frequency
+				w.frequency = w.tfidf
 			})
 		}
 	})
