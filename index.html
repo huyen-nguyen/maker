@@ -47,31 +47,50 @@
 						<img src="assets/Mellow.png" width="310" style="margin-left: -180px"/>
 						<h1 class="display-5 fw-bolder text-white mb-1">Visualization for
 							Topic Evolution</h1>
-						<p class="lead fw-normal text-white-50 my-4">Make sure your data file has columns
-							named <code>Time</code> and <code>Text</code>!</p>
+<!--						<p class="lead fw-normal text-white-50 my-4">Make sure your data file has columns-->
+<!--							named <code>Time</code> and <code>Text</code>!</p>-->
 
 						<div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
 							<input type="file" id="fileElem" style="display:none" accept=".csv, .tsv">
 						</div>
-						<div class="btn-toolbar d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start" role="toolbar" aria-label="Toolbar with button groups">
-							<div class="btn-group mr-2" role="group" aria-label="First group">
-								<a class="btn btn-primary btn-lg px-4 me-sm-3" id="fileSelect">Upload file</a>
-							</div>
-							<div class="btn-group mr-2" role="group" aria-label="Second group">
-								<div class="dropdown">
-									<a class="btn btn-outline-info dropdown-toggle" type="button"
-									   id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										Try data samples
-									</a>
-									<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-										<a class="dropdown-item" href="#" id="education">Education Assessment</a>
-										<a class="dropdown-item" href="#" id="pathway">Protein Pathway</a>
+
+						<div class="p-3 mt-4" id="outer-box">
+							<div class="pt-1" style="padding-left: 0.35rem">
+								<div class="btn-toolbar d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start" role="toolbar" aria-label="Toolbar with button groups">
+									<div class="btn-group mr-2" role="group" aria-label="First group">
+										<a class="btn btn-primary btn-lg px-3" id="fileSelect">Upload file</a>
+									</div>
+									<div class="btn-group text-light" role="group" aria-label="middle group">
+										<div class="btn btn-dark btn-lg or-text">or</div>
+									</div>
+									<div class="btn-group mr-2" role="group" aria-label="Second group">
+										<div class="dropdown">
+											<a class="btn btn-secondary dropdown-toggle" type="button"
+											   id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												Try data samples
+											</a>
+											<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+												<a class="dropdown-item" href="#" id="education">Education Assessment</a>
+												<a class="dropdown-item" href="#" id="pathway">Protein Pathway</a>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="text-light my-3" id="naming-box">
+									<div class="my-2">
+										<label>Name of <code>time</code> column: </label>
+										<input class="col-name" id="timeColName" type="text" value="time">
+									</div>
+									<div class="my-2">
+										<label>Name of <code>text</code> column: </label>
+										<input class="col-name" id="textColName" type="text" value="text">
 									</div>
 								</div>
 							</div>
-							<a class="btn button button12 px-4 m-0" id="vis-trigger"><p>Visualize!</p></a>
 
 						</div>
+
+						<a class="btn button button12 px-4" id="vis-trigger"><p>Visualize!</p></a>
 						<div id="alert-file" class="pt-3 text-white"><span>&zwnj;<br>&zwnj;</span></div>
 					</div>
 				</div>
