@@ -49,32 +49,30 @@ const previewData = document.getElementById('preview-data');
 const loading = d3.select("#loading");
 const alertField = d3.select("#alert-field");
 const sample_fries = d3.select("#pathway")
-	.on("click", function (){
+	.on("click", function () {
 		handleSamples("data/maker_Cards_Fries_Text.tsv")
 	});
-	d3.select("#education")
-	.on("click", function (){
+d3.select("#education")
+	.on("click", function () {
 		handleSamples("data/maker_init-journal-data.csv")
 	});
 
-	const sample_education = d3.select("#vast")
-	.on("click", function (){
+const sample_education = d3.select("#vast")
+	.on("click", function () {
 		handleSamples("data/evenyint.csv")
 	});
 
 filepicker.addEventListener("change", handleFiles, false);
 
 visTrigger.addEventListener("click", () => {
-	if (!fileLoadedFlag){
+	if (!fileLoadedFlag) {
 		alertFile.innerHTML = '<span class="text-warning">Select a file first!<br>&zwnj;</span>';
 		visTrigger.setAttribute("href", "#");
 		return
-	}
-	else if (!fieldFlag){
+	} else if (!fieldFlag) {
 		visTrigger.setAttribute("href", "#");
 		return
-	}
-	else {
+	} else {
 		visualize(dataForVis);
 		visTrigger.setAttribute("href", "#wordstream");
 	}
@@ -84,12 +82,12 @@ function handleFiles(event) {
 	loading.style("display", "inline-block")
 	alertField.style("display", "none")
 
-	const file =  event.target.files[0];
+	const file = event.target.files[0];
 	const signature = file.type;
 	let rawDataForRender, type;
 
 	alertFile.innerHTML = '';
-	alertFile.innerHTML += '<span>File name: ' + file.name + '<br/>' + 'Size: ' + (updateSize(file)? updateSize(file) : 'unknown') + '</span>';
+	alertFile.innerHTML += '<span>File name: ' + file.name + '<br/>' + 'Size: ' + (updateSize(file) ? updateSize(file) : 'unknown') + '</span>';
 
 	d3.select("#jsonTable").remove();
 
@@ -100,16 +98,16 @@ function handleFiles(event) {
 		// *store* raw user input in `data`
 		const rawData = e.target.result;
 		fileLoadedFlag = true;  // load successfully
-		widthUpdateFlag = false; heightUpdateFlag = false;  // reset flags
+		widthUpdateFlag = false;
+		heightUpdateFlag = false;  // reset flags
 		// *read it*
 		// find file type based on signature
 		let typeIndex = Object.keys(fileSignature).indexOf(signature);
 
-		if (typeIndex >= 0){
+		if (typeIndex >= 0) {
 			type = fileSignature[signature];
 			rawDataForRender = window[type + 'Read'](rawData, true);
-		}
-		else {
+		} else {
 			console.log("Wrong input type!")
 		}
 
@@ -129,24 +127,24 @@ function handleSamples(path) {
 	loading.style("display", "inline-block")
 	alertField.style("display", "none")
 	d3.select("#jsonTable").remove();
-	widthUpdateFlag = false; heightUpdateFlag = false;  // reset flags
+	widthUpdateFlag = false;
+	heightUpdateFlag = false;  // reset flags
 
-	if (path.toLowerCase().endsWith("csv")){
-		d3.csv(path, function (err, rawDataForRender){
+	if (path.toLowerCase().endsWith("csv")) {
+		d3.csv(path, function (err, rawDataForRender) {
 			alertFile.innerHTML = '';
 			alertFile.innerHTML += '<span>File name: maker_init-journal-data.csv' + '<br/>' + 'Size: 192.012 KiB (196620 bytes)</span>';
 			doSamples(rawDataForRender)
 		})
-	}
-	else {
-		d3.tsv(path, function (err, rawDataForRender){
+	} else {
+		d3.tsv(path, function (err, rawDataForRender) {
 			alertFile.innerHTML = '';
 			alertFile.innerHTML += '<span>File name: maker_Cards_Fries_Text.tsv' + '<br/>' + 'Size: 1.434 MiB (1503230 bytes)</span>';
 			doSamples(rawDataForRender)
 		})
 	}
 
-	function doSamples(rawDataForRender){
+	function doSamples(rawDataForRender) {
 		fileLoadedFlag = true;  // load successfully
 		// render preview
 		createTable(rawDataForRender);
@@ -163,12 +161,11 @@ function handleSamples(path) {
 }
 
 
-
 // Read input file using different parsers. List functions here.
 
-function csvRead(rawData, raw){
+function csvRead(rawData, raw) {
 	return d3.csvParse(rawData).map(d => {
-		if (raw){
+		if (raw) {
 			return d;
 		}
 		return {
@@ -177,9 +174,10 @@ function csvRead(rawData, raw){
 		}
 	});
 }
-function tsvRead(rawData, raw){
+
+function tsvRead(rawData, raw) {
 	return d3.tsvParse(rawData).map(d => {
-		if (raw){
+		if (raw) {
 			return d;
 		}
 		return {
@@ -205,20 +203,20 @@ function updateSize(file) {
 	return sOutput;
 }
 
-function createTable(rawDataForRender){
+function createTable(rawDataForRender) {
 	loading.style("display", "none")
 
 	$('#preview-data')
 		.append('<table id="jsonTable" class="table table-striped"><thead' +
-		' class="thead-light"><tr></tr></thead><tbody></tbody></table>');
+			' class="thead-light"><tr></tr></thead><tbody></tbody></table>');
 
-	$.each(Object.keys(rawDataForRender[0]), function(index, key){
+	$.each(Object.keys(rawDataForRender[0]), function (index, key) {
 		$('#jsonTable thead tr').append('<th>' + key + '</th>');
 	});
-	$.each(rawDataForRender, function(index, jsonObject){
-		if(Object.keys(jsonObject).length > 0){
+	$.each(rawDataForRender, function (index, jsonObject) {
+		if (Object.keys(jsonObject).length > 0) {
 			var tableRow = '<tr>';
-			$.each(Object.keys(jsonObject), function(i, key){
+			$.each(Object.keys(jsonObject), function (i, key) {
 				tableRow += '<td>' + jsonObject[key] + '</td>';
 			});
 			tableRow += "</tr>";
@@ -228,17 +226,16 @@ function createTable(rawDataForRender){
 
 }
 
-function checkInputFields(rawDataForRender){
+function checkInputFields(rawDataForRender) {
 	const fields = Object.keys(rawDataForRender[0]);
 	// case-sensitive
-	if (!fields.includes("Time") || !fields.includes("Text")){
+	if (!fields.includes("Time") || !fields.includes("Text")) {
 		fieldFlag = false;
 		alertField
 			.style("display", "block")
 			.html('<span>Missing columns named <code>Time</code> and/or' +
-			' <code>Text</code>! (case-sensitive)</span>')
-	}
-	else {
+				' <code>Text</code>! (case-sensitive)</span>')
+	} else {
 		fieldFlag = true;
 	}
 }
