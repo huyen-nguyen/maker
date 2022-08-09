@@ -28,6 +28,7 @@ let fileLoadedFlag = false, fieldFlag = false;
 let dataForNLP, dataForVis;
 let categoryType = "pos"
 let repType = 'frequency'
+let properties, type;
 
 // ------- button to choose file, instead of the default -------
 const fileSelect = document.getElementById("fileSelect"),
@@ -60,19 +61,54 @@ d3.select("#education")
 filepicker.addEventListener("change", handleFiles, false);
 
 visTrigger.addEventListener("click", () => {
-	if (!fileLoadedFlag) {
-		alertFile.innerHTML = '<span class="text-warning">Select a file first!<br>&zwnj;</span>';
-		visTrigger.setAttribute("href", "#");
-		return
-	}
+	checkInput();
+
 	// else if (!fieldFlag) {
 	// 	visTrigger.setAttribute("href", "#");
 	// 	return
-	 else {
-		visualize(dataForVis);
-		visTrigger.setAttribute("href", "#wordstream");
-	}
+	//  else {
+	// 	visualize(dataForVis);
+	// 	visTrigger.setAttribute("href", "#wordstream");
+	// }
 })
+
+d3.select("#textColName").on("change", function () {
+	console.log(this.value)
+	checkInput();
+})
+
+d3.select("#timeColName").on("change", function () {
+	console.log(this.value)
+	checkInput();
+})
+
+function checkInput() {
+	if (!fileLoadedFlag) {
+		alertFile.innerHTML = '<span class="text-warning">Select a file first!<br>&zwnj;</span>';
+		visTrigger.setAttribute("href", "#");
+	} else {
+		alertFile.innerHTML = '';
+		let currentTimeCol = document.getElementById('timeColName').value,
+			currentTextCol = document.getElementById('textColName').value;
+
+		if (currentTimeCol === '') {
+			alertFile.innerHTML += '<span class="text-warning">• Missing <code>time</code> column' +
+				' name.<br>&zwnj;</span>';
+		}
+		else if (!properties.includes(currentTimeCol)) {
+			alertFile.innerHTML += '<span class="text-warning">• No column named <text class="text-white"><b>' + currentTimeCol + '</b></text>' +
+				'. <br></span>';
+		}
+
+		if (currentTextCol === '') {
+			alertFile.innerHTML += '<span class="text-warning">• Missing <code>text</code> column' +
+				' name.<br>&zwnj;</span>';
+		} else if (!properties.includes(currentTextCol)) {
+			alertFile.innerHTML += '<span class="text-warning">• No column named <text class="text-white"><b>' + currentTextCol + '</b></text>' +
+				'. <br></span>';
+		}
+	}
+}
 
 function handleFiles(event) {
 	loading.style("display", "inline-block")
@@ -111,7 +147,7 @@ function handleFiles(event) {
 		createTable(rawDataForRender);
 		// checkInputFields(rawDataForRender);
 
-		dataForNLP = window[type + 'Read'](rawData, false);
+		dataForNLP = window[type + 'Read'](rawData, false);  // retrieve time and text columns out of that data
 		dataForVis = textProcessing(dataForNLP);
 
 		// TODO: ask user whether want to use this parsing of data or other specification
@@ -127,16 +163,18 @@ function handleSamples(path) {
 	heightUpdateFlag = false;  // reset flags
 
 	if (path.toLowerCase().endsWith("csv")) {
-		d3.csv(path, function (err, rawDataForRender) {
+		d3.csv(path, function (err, rawDataForRenderIn) {
 			fileInfo.innerHTML = '';
 			fileInfo.innerHTML += 'File name: maker_init-journal-data.csv' + '<br/>' + 'Size: 192.012 KiB (196620 bytes)';
-			doSamples(rawDataForRender, 'Week', 'Text')
+			alertFile.innerHTML = ''
+			doSamples(rawDataForRenderIn, 'Week', 'Text')
 		})
 	} else {
-		d3.tsv(path, function (err, rawDataForRender) {
+		d3.tsv(path, function (err, rawDataForRenderIn) {
 			fileInfo.innerHTML = '';
 			fileInfo.innerHTML += 'File name: maker_Cards_Fries_Text.tsv' + '<br/>' + 'Size: 1.434 MiB (1503230 bytes)';
-			doSamples(rawDataForRender, 'Year', 'Title')
+			alertFile.innerHTML = ''
+			doSamples(rawDataForRenderIn, 'Year', 'Title')
 		})
 	}
 
@@ -203,7 +241,7 @@ function updateSize(file) {
 
 function createTable(rawDataForRender) {
 	loading.style("display", "none")
-
+	properties = Object.keys(rawDataForRender[0])
 	$('#preview-data')
 		.append('<table id="jsonTable" class="table table-striped"><thead' +
 			' class="thead-light"><tr></tr></thead><tbody></tbody></table>');
