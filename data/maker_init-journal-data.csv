@@ -1,4 +1,4 @@
-CourseID,CourseName,YearQuarter,StudentId,Time,PromptText,ResponseText,Text
+CourseID,CourseName,YearQuarter,StudentId,Week,PromptText,ResponseText,Text
 BIS315,Understanding Statistics,20201,1,Week 1,"Address the following questions to help me understand your perspective:
 
 Why are you taking this course?

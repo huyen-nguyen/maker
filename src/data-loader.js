@@ -25,7 +25,6 @@ A. Logic to process input type:
 // input file specifications
 const delimiter = [] // (for txt file)
 let fileLoadedFlag = false, fieldFlag = false;
-let newDataLoadFlag = false; // reset on loading new data
 let dataForNLP, dataForVis;
 let categoryType = "pos"
 let repType = 'frequency'
@@ -45,6 +44,7 @@ const filepicker = document.getElementById("fileElem");
 const output = document.getElementById('output');
 const visTrigger = document.getElementById('vis-trigger');
 const alertFile = document.getElementById('alert-file');
+const fileInfo = document.getElementById('file-info');
 const previewData = document.getElementById('preview-data');
 const loading = d3.select("#loading");
 const alertField = d3.select("#alert-field");
@@ -57,11 +57,6 @@ d3.select("#education")
 		handleSamples("data/maker_init-journal-data.csv")
 	});
 
-const sample_education = d3.select("#vast")
-	.on("click", function () {
-		handleSamples("data/evenyint.csv")
-	});
-
 filepicker.addEventListener("change", handleFiles, false);
 
 visTrigger.addEventListener("click", () => {
@@ -69,10 +64,11 @@ visTrigger.addEventListener("click", () => {
 		alertFile.innerHTML = '<span class="text-warning">Select a file first!<br>&zwnj;</span>';
 		visTrigger.setAttribute("href", "#");
 		return
-	} else if (!fieldFlag) {
-		visTrigger.setAttribute("href", "#");
-		return
-	} else {
+	}
+	// else if (!fieldFlag) {
+	// 	visTrigger.setAttribute("href", "#");
+	// 	return
+	 else {
 		visualize(dataForVis);
 		visTrigger.setAttribute("href", "#wordstream");
 	}
@@ -86,8 +82,8 @@ function handleFiles(event) {
 	const signature = file.type;
 	let rawDataForRender, type;
 
-	alertFile.innerHTML = '';
-	alertFile.innerHTML += '<span>File name: ' + file.name + '<br/>' + 'Size: ' + (updateSize(file) ? updateSize(file) : 'unknown') + '</span>';
+	fileInfo.innerHTML = '';
+	fileInfo.innerHTML += 'File name: ' + file.name + '<br/>' + 'Size: ' + (updateSize(file) ? updateSize(file) : 'unknown');
 
 	d3.select("#jsonTable").remove();
 
@@ -113,7 +109,7 @@ function handleFiles(event) {
 
 		// render preview
 		createTable(rawDataForRender);
-		checkInputFields(rawDataForRender);
+		// checkInputFields(rawDataForRender);
 
 		dataForNLP = window[type + 'Read'](rawData, false);
 		dataForVis = textProcessing(dataForNLP);
@@ -132,28 +128,30 @@ function handleSamples(path) {
 
 	if (path.toLowerCase().endsWith("csv")) {
 		d3.csv(path, function (err, rawDataForRender) {
-			alertFile.innerHTML = '';
-			alertFile.innerHTML += '<span>File name: maker_init-journal-data.csv' + '<br/>' + 'Size: 192.012 KiB (196620 bytes)</span>';
-			doSamples(rawDataForRender)
+			fileInfo.innerHTML = '';
+			fileInfo.innerHTML += 'File name: maker_init-journal-data.csv' + '<br/>' + 'Size: 192.012 KiB (196620 bytes)';
+			doSamples(rawDataForRender, 'Week', 'Text')
 		})
 	} else {
 		d3.tsv(path, function (err, rawDataForRender) {
-			alertFile.innerHTML = '';
-			alertFile.innerHTML += '<span>File name: maker_Cards_Fries_Text.tsv' + '<br/>' + 'Size: 1.434 MiB (1503230 bytes)</span>';
-			doSamples(rawDataForRender)
+			fileInfo.innerHTML = '';
+			fileInfo.innerHTML += 'File name: maker_Cards_Fries_Text.tsv' + '<br/>' + 'Size: 1.434 MiB (1503230 bytes)';
+			doSamples(rawDataForRender, 'Year', 'Title')
 		})
 	}
 
-	function doSamples(rawDataForRender) {
+	function doSamples(rawDataForRender, timeCol, textCol) {
 		fileLoadedFlag = true;  // load successfully
+		d3.select("#timeColName").attr("value", timeCol)
+		d3.select("#textColName").attr("value", textCol)
 		// render preview
 		createTable(rawDataForRender);
-		checkInputFields(rawDataForRender);
+		// checkInputFields(rawDataForRender);
 
 		dataForNLP = rawDataForRender.map(d => {
 			return {
-				Time: d['Time'],
-				Text: d['Text'],
+				Time: d[timeCol],
+				Text: d[textCol],
 			}
 		});
 		dataForVis = textProcessing(dataForNLP);

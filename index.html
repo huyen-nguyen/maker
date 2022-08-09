@@ -88,12 +88,11 @@
 								<div class="text-light my-3" id="naming-box">
 									<div class="my-2">
 										<label>Name of <code>time</code> column: </label>
-										<input class="col-name" id="timeColName" placeholder="time"
-											   type="text">
+										<input class="col-name" id="timeColName" placeholder="time" type="text">
 									</div>
 									<div class="my-2">
 										<label>Name of <code>text</code> column: </label>
-										<input class="col-name" id="textColName" placeholder="time" type="text">
+										<input class="col-name" id="textColName" placeholder="text" type="text">
 									</div>
 								</div>
 							</div>
@@ -115,7 +114,13 @@
 						</div>
 						<div class="p-2 bg-warning rounded-3" id="alert-field"></div>
 					</div>
-					<div class="text-white-50 mb-2" style="float: left">Supported format: CSV, TSV.</div>
+					<div class="row">
+						<div class="col text-white" style="text-align: left" id="file-info">
+						</div>
+						<div class="col text-white-50" style="text-align: right">
+							Supported format: CSV, TSV.<br>&zwnj;
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
