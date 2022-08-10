@@ -45,6 +45,7 @@ const filepicker = document.getElementById("fileElem");
 const output = document.getElementById('output');
 const visTrigger = document.getElementById('vis-trigger');
 const alertFile = document.getElementById('alert-file');
+const firstRow = document.getElementById('first-row'), secondRow = document.getElementById('second-row');
 const fileInfo = document.getElementById('file-info');
 const previewData = document.getElementById('preview-data');
 const loading = d3.select("#loading");
@@ -84,28 +85,25 @@ d3.select("#timeColName").on("change", function () {
 
 function checkInput() {
 	if (!fileLoadedFlag) {
-		alertFile.innerHTML = '<span class="text-warning">Select a file first!<br>&zwnj;</span>';
+		firstRow.innerHTML = 'Select a file first!'
 		visTrigger.setAttribute("href", "#");
 	} else {
-		alertFile.innerHTML = '';
+		resetAlertFile()
 		let currentTimeCol = document.getElementById('timeColName').value,
 			currentTextCol = document.getElementById('textColName').value;
 
 		if (currentTimeCol === '') {
-			alertFile.innerHTML += '<span class="text-warning">• Missing <code>time</code> column' +
-				' name.<br>&zwnj;</span>';
+			firstRow.innerHTML = '• Missing <code>time</code> column name.';
 		}
 		else if (!properties.includes(currentTimeCol)) {
-			alertFile.innerHTML += '<span class="text-warning">• No column named <text class="text-white"><b>' + currentTimeCol + '</b></text>' +
-				'. <br></span>';
+			firstRow.innerHTML += '• No column named <b>' + currentTimeCol + '</b>';
 		}
 
 		if (currentTextCol === '') {
-			alertFile.innerHTML += '<span class="text-warning">• Missing <code>text</code> column' +
-				' name.<br>&zwnj;</span>';
+			secondRow.innerHTML = '• Missing <code>text</code> column name.';
+			
 		} else if (!properties.includes(currentTextCol)) {
-			alertFile.innerHTML += '<span class="text-warning">• No column named <text class="text-white"><b>' + currentTextCol + '</b></text>' +
-				'. <br></span>';
+			secondRow.innerHTML += '• No column named <b>' + currentTextCol + '</b>';
 		}
 	}
 }
@@ -166,14 +164,14 @@ function handleSamples(path) {
 		d3.csv(path, function (err, rawDataForRenderIn) {
 			fileInfo.innerHTML = '';
 			fileInfo.innerHTML += 'File name: maker_init-journal-data.csv' + '<br/>' + 'Size: 192.012 KiB (196620 bytes)';
-			alertFile.innerHTML = ''
+			resetAlertFile()
 			doSamples(rawDataForRenderIn, 'Week', 'Text')
 		})
 	} else {
 		d3.tsv(path, function (err, rawDataForRenderIn) {
 			fileInfo.innerHTML = '';
 			fileInfo.innerHTML += 'File name: maker_Cards_Fries_Text.tsv' + '<br/>' + 'Size: 1.434 MiB (1503230 bytes)';
-			alertFile.innerHTML = ''
+			resetAlertFile()
 			doSamples(rawDataForRenderIn, 'Year', 'Title')
 		})
 	}
@@ -196,6 +194,10 @@ function handleSamples(path) {
 	}
 }
 
+function resetAlertFile(){
+	firstRow.innerHTML = '&zwnj;'
+	secondRow.innerHTML = '&zwnj;'
+}
 
 // Read input file using different parsers. List functions here.
 
