@@ -178,8 +178,8 @@ function handleSamples(path) {
 
 	function doSamples(rawDataForRender, timeCol, textCol) {
 		fileLoadedFlag = true;  // load successfully
-		d3.select("#timeColName").attr("value", timeCol)
-		d3.select("#textColName").attr("value", textCol)
+		document.getElementById('timeColName').value = timeCol;
+		document.getElementById('textColName').value = textCol;
 		// render preview
 		createTable(rawDataForRender);
 		// checkInputFields(rawDataForRender);
@@ -263,7 +263,7 @@ function createTable(rawDataForRender) {
 	});
 
 }
-
+// this one is for when the fields are fixed to "Time" and "Text"
 function checkInputFields(rawDataForRender) {
 	const fields = Object.keys(rawDataForRender[0]);
 	// case-sensitive
