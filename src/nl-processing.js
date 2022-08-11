@@ -16,12 +16,14 @@ const excludeWords = {
 	Organization: ['&']
 }
 
-function textProcessing(dataForNLP){
+function textProcessing(dataForNLP) {
 	// group by time
 	let dataGroupedByTime = d3.nest().key(d => d.Time)
 		.entries(dataForNLP)
-		.map(d => {return {time: d.key, text_concated: d.values.map(d => d.Text).join(". ")}})
-		.sort((a,b) => +a.time - +b.time)
+		.map(d => {
+			return {time: d.key, text_concated: d.values.map(d => d.Text).join(". ")}
+		})
+		.sort((a, b) => +a.time - +b.time)
 
 	let dataForVis = [];
 
@@ -46,14 +48,17 @@ function textProcessing(dataForNLP){
 						(t.terms[0].normal !== '') // exclude empty word -- this freaking bug costs me my nerves
 					)
 				)
-				.sort((a,b) => b.values.length - a.values.length)
+				.sort((a, b) => b.values.length - a.values.length)
 				.splice(0, topWords)
-				.map(d => {return {
-					text: d.key,
-					frequency: d.values.length,
-					tfidf: d.values[0].terms[0].tfidf*10,
-					topic: category,
-					id: d.key + '_' + category + '_' + index}})
+				.map(d => {
+					return {
+						text: d.key,
+						frequency: d.values.length,
+						tfidf: d.values[0].terms[0].tfidf * 10,
+						topic: category,
+						id: d.key + '_' + category + '_' + index
+					}
+				})
 		})
 
 		dataForVis.push(obj);
@@ -62,18 +67,18 @@ function textProcessing(dataForNLP){
 	return dataForVis;
 }
 
-function removeEndingPuncMark(str){ // no need for this function, now we take either terms from `text` or `normal` fields
-	for (let i = 0; i < puncMarkList.length; i++){
-		if (str.endsWith(puncMarkList[i])){
+function removeEndingPuncMark(str) { // no need for this function, now we take either terms from `text` or `normal` fields
+	for (let i = 0; i < puncMarkList.length; i++) {
+		if (str.endsWith(puncMarkList[i])) {
 			return str.slice(0, -1);
 		}
 	}
 	return str;
 }
 
-function stripArticle(str){
-	for (let i = 0; i < articleList.length; i++){
-		if (str.startsWith(articleList[i])){
+function stripArticle(str) {
+	for (let i = 0; i < articleList.length; i++) {
+		if (str.startsWith(articleList[i])) {
 			return str.substr(str.indexOf(" ") + 1);
 		}
 	}

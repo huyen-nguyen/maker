@@ -33,14 +33,21 @@ function visualize(dataForVis){
 	}
 
 	wordstream(svg, dataForVis, config)
-
 	if (!firstTimeFlag){
 		firstTimeFlag = true;
 		panelForUpdate()
 	}
 }
 
+function hideVis(){
+	d3.select("#canvasContainer").style("display", "none")
+	d3.select("#controlPanel").style("display", "none")
+}
 
+function showVis(){
+	d3.select("#canvasContainer").style("display", "flex")
+	d3.select("#controlPanel").style("display", "flex")
+}
 
 function panelForUpdate(){
 	// need to create a grid here
@@ -141,7 +148,19 @@ function panelForUpdate(){
 	d3.selectAll(("input[name='stack']")).on("change", function(){      // different NLP engine
 		categoryType = this.value
 		dataForVis = textProcessing(dataForNLP);
-		visualize(dataForVis);
+		
+		let newData;
+		if (repType === 'frequency'){
+			newData = textProcessing(dataForNLP);
+		}
+		else if(repType === 'sudden'){
+			newData = getSuddenData(dataForVis)
+		}
+		else if (repType === 'tfidf'){
+			newData = getTFIDFData(dataForVis)
+		}
+		
+		visualize(newData);
 	});
 
 	d3.select("#panel-3").style("display", "block")

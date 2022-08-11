@@ -1,4 +1,4 @@
-CardId	Time	Conference	Text	Evidence	Author Names
+CardId	Year	Conference	Title	Evidence	Author Names
 PMC1064093	2005	decreases_activity	The p53-dependent apoptotic pathway of breast cancer cells (BC-M1) induced by the bis-type bioreductive compound aziridinylnaphthoquinone	 p21 protein to inhibit the cyclin	p21;cyclin
 PMC117437	2002	decreases_activity	A novel link between the proteasome pathway and the signal transduction pathway of the Bone Morphogenetic Proteins (BMPs)	 SNIP1 is induced in a time-dependent fashion by BMP7	BMP7;SNIP1
 PMC117437	2002	increases_activity	A novel link between the proteasome pathway and the signal transduction pathway of the Bone Morphogenetic Proteins (BMPs)	" Second, SNIP1 is recruited to antizyme and HsN3, which are likely in a complex with Smad1 and Smad4 (Fig. & )."	Smad1;SNIP1
