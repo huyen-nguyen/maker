@@ -25,10 +25,12 @@ A. Logic to process input type:
 // input file specifications
 const delimiter = [] // (for txt file)
 let fileLoadedFlag = false, fieldFlag = false;
-let dataForNLP, dataForVis;
+let sampleFlag = false;
+let dataForRender, dataForNLP, dataForVis;
 let categoryType = "pos"
 let repType = 'frequency'
 let properties, type;
+let timeCol, textCol;
 
 // ------- button to choose file, instead of the default -------
 const fileSelect = document.getElementById("fileSelect"),
@@ -52,41 +54,60 @@ const loading = d3.select("#loading");
 const alertField = d3.select("#alert-field");
 const sample_fries = d3.select("#pathway")
 	.on("click", function () {
+		sampleFlag = true;
 		handleSamples("data/maker_Cards_Fries_Text.tsv")
 	});
 d3.select("#education")
 	.on("click", function () {
+		sampleFlag = true;
 		handleSamples("data/maker_init-journal-data.csv")
 	});
 
 filepicker.addEventListener("change", handleFiles, false);
 
 visTrigger.addEventListener("click", () => {
-	checkInput();
-
-	// else if (!fieldFlag) {
-	// 	visTrigger.setAttribute("href", "#");
-	// 	return
-	//  else {
-	// 	visualize(dataForVis);
-	// 	visTrigger.setAttribute("href", "#wordstream");
-	// }
+	let result = checkInput();
+	if (!!result){
+		timeCol = result.Time;
+		textCol = result.Text;
+		
+		if (sampleFlag){
+			dataForNLP = dataForRender.map(d => {
+				return {
+					Time: d[timeCol],
+					Text: d[textCol],
+				}
+			});
+		}
+		else {
+			dataForNLP = window[type + 'Read'](dataForRender, false);  // retrieve time and text columns out of that data
+		}
+		showVis()
+		visTrigger.setAttribute("href", "#wordstream");
+		dataForVis = textProcessing(dataForNLP);
+		visualize(dataForVis);
+	}
+	else{
+		hideVis()
+		visTrigger.setAttribute("href", "#");
+	}
 })
 
 d3.select("#textColName").on("change", function () {
-	console.log(this.value)
+	hideVis()
 	checkInput();
 })
 
 d3.select("#timeColName").on("change", function () {
-	console.log(this.value)
+	hideVis()
 	checkInput();
 })
 
 function checkInput() {
 	if (!fileLoadedFlag) {
 		firstRow.innerHTML = 'Select a file first!'
-		visTrigger.setAttribute("href", "#");
+		// visTrigger.setAttribute("href", "#");
+		return false;
 	} else {
 		resetAlertFile()
 		let currentTimeCol = document.getElementById('timeColName').value,
@@ -105,6 +126,15 @@ function checkInput() {
 		} else if (!properties.includes(currentTextCol)) {
 			secondRow.innerHTML += '• No column named <b>' + currentTextCol + '</b>';
 		}
+		
+		// if both fields exist
+		if (properties.includes(currentTimeCol) && properties.includes(currentTextCol)){
+			return {
+				Time: currentTimeCol,
+				Text: currentTextCol,
+			}
+		}
+		return false;
 	}
 }
 
@@ -114,12 +144,14 @@ function handleFiles(event) {
 
 	const file = event.target.files[0];
 	const signature = file.type;
-	let rawDataForRender, type;
+	let rawDataForRender;
 
 	fileInfo.innerHTML = '';
 	fileInfo.innerHTML += 'File name: ' + file.name + '<br/>' + 'Size: ' + (updateSize(file) ? updateSize(file) : 'unknown');
 
 	d3.select("#jsonTable").remove();
+	hideVis();
+	resetInputFields()
 
 	// ---------
 	var reader = new FileReader();
@@ -143,11 +175,7 @@ function handleFiles(event) {
 
 		// render preview
 		createTable(rawDataForRender);
-		// checkInputFields(rawDataForRender);
-
-		dataForNLP = window[type + 'Read'](rawData, false);  // retrieve time and text columns out of that data
-		dataForVis = textProcessing(dataForNLP);
-
+		dataForRender = rawDataForRender
 		// TODO: ask user whether want to use this parsing of data or other specification
 	};
 	reader.readAsText(file);
@@ -159,6 +187,7 @@ function handleSamples(path) {
 	d3.select("#jsonTable").remove();
 	widthUpdateFlag = false;
 	heightUpdateFlag = false;  // reset flags
+	hideVis()
 
 	if (path.toLowerCase().endsWith("csv")) {
 		d3.csv(path, function (err, rawDataForRenderIn) {
@@ -178,25 +207,22 @@ function handleSamples(path) {
 
 	function doSamples(rawDataForRender, timeCol, textCol) {
 		fileLoadedFlag = true;  // load successfully
-		document.getElementById('timeColName').value = timeCol;
-		document.getElementById('textColName').value = textCol;
+		document.getElementById('timeColName').value = timeCol;     // initial loading
+		document.getElementById('textColName').value = textCol;     // initial loading
 		// render preview
 		createTable(rawDataForRender);
-		// checkInputFields(rawDataForRender);
-
-		dataForNLP = rawDataForRender.map(d => {
-			return {
-				Time: d[timeCol],
-				Text: d[textCol],
-			}
-		});
-		dataForVis = textProcessing(dataForNLP);
+		dataForRender = rawDataForRender;
 	}
 }
 
 function resetAlertFile(){
 	firstRow.innerHTML = '&zwnj;'
 	secondRow.innerHTML = '&zwnj;'
+}
+
+function resetInputFields(){
+	document.getElementById('timeColName').value = '';     // initial loading
+	document.getElementById('textColName').value = '';     // initial loading
 }
 
 // Read input file using different parsers. List functions here.
@@ -207,8 +233,8 @@ function csvRead(rawData, raw) {
 			return d;
 		}
 		return {
-			Time: d['Time'],
-			Text: d['Text'],
+			Time: d[timeCol],
+			Text: d[textCol],
 		}
 	});
 }
@@ -219,8 +245,8 @@ function tsvRead(rawData, raw) {
 			return d;
 		}
 		return {
-			Time: d['Time'],
-			Text: d['Text'],
+			Time: d[timeCol],
+			Text: d[textCol],
 		}
 	});
 }
