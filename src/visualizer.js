@@ -12,48 +12,74 @@ let widthUpdateFlag = false, heightUpdateFlag = false;
 let svg = d3.select("#canvas").append('svg').attr("id", "mainSVG")
 d3.select("#canvas").style("max-width", window.innerWidth + "px")
 
-function visualize(dataForVis){
+function visualize(dataForVis) {
 	// example use
 	d3.select("#mainSVG").selectAll("*").remove()
 
-	if (!widthUpdateFlag){
-		svg.attr("width", Math.max(120*dataForVis.length, 1200))
+	if (!widthUpdateFlag) {
+		svg.attr("width", Math.max(120 * dataForVis.length, 1200))
 
-		if (document.getElementById("widthValue")){
+		if (document.getElementById("widthValue")) {
 			document.getElementById("widthValue").value = +svg.attr("width") // update number on screen
 		}
 	}
 
-	if (!heightUpdateFlag){
-		svg.attr("height", 200* Object.keys(dataForVis[0].words).length);
+	if (!heightUpdateFlag) {
+		svg.attr("height", 200 * Object.keys(dataForVis[0].words).length);
 
-		if (document.getElementById("heightValue")){
+		if (document.getElementById("heightValue")) {
 			document.getElementById("heightValue").value = +svg.attr("height") // update number on screen
 		}
 	}
 
+	showVis()
 	wordstream(svg, dataForVis, config)
-	if (!firstTimeFlag){
+	hideLoader()
+
+	if (!firstTimeFlag) {
 		firstTimeFlag = true;
 		panelForUpdate()
 	}
 }
 
-function hideVis(){
+function hideVis() {
 	d3.select("#canvasContainer").style("display", "none")
 	d3.select("#controlPanel").style("display", "none")
 }
 
-function showVis(){
+function showVis() {
 	d3.select("#canvasContainer").style("display", "flex")
 	d3.select("#controlPanel").style("display", "flex")
 }
 
-function panelForUpdate(){
+function showLoader() {
+	d3.select("#ws-loading").style("display", "inline-block")
+}
+
+function hideLoader() {
+	d3.select("#ws-loading").style("display", "none")
+}
+
+function hideSVG(){
+	d3.select("#mainSVG")
+		// .style("display", "none")    // hide completely
+		.style("opacity", 0.5)
+	// d3.select("#canvas").style("height", (+svg.attr("height") - 210) + "px") // 204 is the height of spinner
+}
+
+function showSVG(){
+	d3.select("#mainSVG")
+		// .style("display", "flex")
+		.style("opacity", 1)
+	// d3.select("#canvas").style("height", "unset");
+}
+
+function panelForUpdate() {
 	// need to create a grid here
 	d3.select("#panel-1").style("display", "block")
 	const panel1 = d3.select("#panel-1")
-	const div1 = panel1.append("div").attr("class", "mb-3"), div2 = panel1.append("div").attr("class", "mb-3"),div3 = panel1.append("div").attr("class", "mb-3")
+	const div1 = panel1.append("div").attr("class", "mb-3"), div2 = panel1.append("div").attr("class", "mb-3"),
+		div3 = panel1.append("div").attr("class", "mb-3")
 	div1.append("text")
 		.html("Minimum font-size: ");
 
@@ -145,62 +171,69 @@ function panelForUpdate(){
 
 	d3.select("#panel-2").style("display", "block")
 
-	d3.selectAll(("input[name='stack']")).on("change", function(){      // different NLP engine
+	d3.selectAll(("input[name='stack']")).on("change", function () {      // different NLP engine
 		categoryType = this.value
-		dataForVis = textProcessing(dataForNLP);
-		
 		let newData;
-		if (repType === 'frequency'){
-			newData = textProcessing(dataForNLP);
+		showLoader()
+		hideSVG()
+
+		const myTimeout = setTimeout(myGreeting, 100);
+		function myGreeting() {
+			dataForVis = textProcessing(dataForNLP);
+			if (repType === 'frequency') {
+				newData = textProcessing(dataForNLP);
+			} else if (repType === 'sudden') {
+				newData = getSuddenData(dataForVis)
+			} else if (repType === 'tfidf') {
+				newData = getTFIDFData(dataForVis)
+			}
+			showSVG()
+			visualize(newData);
 		}
-		else if(repType === 'sudden'){
-			newData = getSuddenData(dataForVis)
-		}
-		else if (repType === 'tfidf'){
-			newData = getTFIDFData(dataForVis)
-		}
-		
-		visualize(newData);
+
 	});
 
 	d3.select("#panel-3").style("display", "block")
 
-	d3.selectAll(("input[name='metric']")).on("change", function(){     // different modes of representation
+	d3.selectAll(("input[name='metric']")).on("change", function () {     // different modes of representation
 		repType = this.value
 		let newData;
-		if (repType === 'frequency'){
-			newData = textProcessing(dataForNLP);
-		}
-		else if(repType === 'sudden'){
-			newData = getSuddenData(dataForVis)
-		}
-		else if (repType === 'tfidf'){
-			newData = getTFIDFData(dataForVis)
-		}
+		showLoader()
+		hideSVG()
 
-		visualize(newData);
+		const myTimeout = setTimeout(myGreeting, 50);
+		function myGreeting() {
+			if (repType === 'frequency') {
+				newData = textProcessing(dataForNLP);
+			} else if (repType === 'sudden') {
+				newData = getSuddenData(dataForVis)
+			} else if (repType === 'tfidf') {
+				newData = getTFIDFData(dataForVis)
+			}
+			showSVG()
+			visualize(newData);
+		}
 	});
 }
 
-function getSuddenData(dataOG){
+function getSuddenData(dataOG) {
 	let data = JSON.parse(JSON.stringify(dataOG));
 	eval(categoryType + "Categories").forEach(c => {
 		data[0].words[c].forEach(w => {
 			w.frequencyOG = w.frequency
-			w.frequency = (w.frequencyOG+1)     // frequency = sudden;
+			w.frequency = (w.frequencyOG + 1)     // frequency = sudden;
 		})
 
-		for (let i = 1; i < data.length; i++){
+		for (let i = 1; i < data.length; i++) {
 			data[i].words[c].forEach(w => {
 				w.frequencyOG = w.frequency
 
 				// find the prev existent
-				let prev = data[i-1].words[c].find(sword => sword.text === w.text);
-				if (prev){
-					w.frequency = (w.frequencyOG+1)/(prev.frequencyOG+1)
-				}
-				else{
-					w.frequency = (w.frequencyOG+1)
+				let prev = data[i - 1].words[c].find(sword => sword.text === w.text);
+				if (prev) {
+					w.frequency = (w.frequencyOG + 1) / (prev.frequencyOG + 1)
+				} else {
+					w.frequency = (w.frequencyOG + 1)
 				}
 			})
 		}
@@ -208,10 +241,10 @@ function getSuddenData(dataOG){
 	return data
 }
 
-function getTFIDFData(dataOG){
+function getTFIDFData(dataOG) {
 	let data = JSON.parse(JSON.stringify(dataOG));
 	eval(categoryType + "Categories").forEach(c => {
-		for (let i = 0; i < data.length; i++){
+		for (let i = 0; i < data.length; i++) {
 			data[i].words[c].forEach(w => {
 				w.frequencyOG = w.frequency
 				w.frequency = w.tfidf

@@ -39,6 +39,7 @@ function textProcessing(dataForNLP) {
 		doc.compute('tfidf')
 		const terms = doc.terms().json()
 
+		// based on category type: POS or NER
 		eval(categoryType + "Categories").forEach(category => {
 			obj.words[category] = d3.nest().key(d => (d.terms[0].root || d.terms[0].normal))
 				.entries(terms
