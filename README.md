@@ -4,4 +4,4 @@
 
 Application: https://huyen-nguyen.github.io/maker/
 
-![alt text](https://i.imgur.com/Yr3Idt6.png)
+![WordStream_Maker_Interface](assets/interface.png)

@@ -243,7 +243,7 @@ table td, table th{
 }
 
 #canvasContainer{
-	display:flex;
+	display:none;
 	align-items:center;
 	justify-content:center;
 }
@@ -262,3 +262,6 @@ code{
 	left: 44%;
 }
 
+#controlPanel{
+	display: none;
+}
