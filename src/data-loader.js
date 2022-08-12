@@ -55,12 +55,12 @@ const alertField = d3.select("#alert-field");
 const sample_fries = d3.select("#pathway")
 	.on("click", function () {
 		sampleFlag = true;
-		handleSamples("data/maker_Cards_Fries_Text.tsv")
+		handleSamples("data/protein-pathway-data.tsv")
 	});
 d3.select("#education")
 	.on("click", function () {
 		sampleFlag = true;
-		handleSamples("data/maker_init-journal-data.csv")
+		handleSamples("data/educational-assessment-journal-data.csv")
 	});
 
 filepicker.addEventListener("change", handleFiles, false);
@@ -70,7 +70,7 @@ visTrigger.addEventListener("click", () => {
 	if (!!result){
 		timeCol = result.Time;
 		textCol = result.Text;
-		
+
 		if (sampleFlag){
 			dataForNLP = dataForRender.map(d => {
 				return {
@@ -117,16 +117,16 @@ function checkInput() {
 			firstRow.innerHTML = '• Missing <code>time</code> column name.';
 		}
 		else if (!properties.includes(currentTimeCol)) {
-			firstRow.innerHTML += '• No column named <b>' + currentTimeCol + '</b>';
+			firstRow.innerHTML += '• No column named <b>' + currentTimeCol + '</b>.';
 		}
 
 		if (currentTextCol === '') {
 			secondRow.innerHTML = '• Missing <code>text</code> column name.';
-			
+
 		} else if (!properties.includes(currentTextCol)) {
-			secondRow.innerHTML += '• No column named <b>' + currentTextCol + '</b>';
+			secondRow.innerHTML += '• No column named <b>' + currentTextCol + '</b>.';
 		}
-		
+
 		// if both fields exist
 		if (properties.includes(currentTimeCol) && properties.includes(currentTextCol)){
 			return {
@@ -192,14 +192,14 @@ function handleSamples(path) {
 	if (path.toLowerCase().endsWith("csv")) {
 		d3.csv(path, function (err, rawDataForRenderIn) {
 			fileInfo.innerHTML = '';
-			fileInfo.innerHTML += 'File name: maker_init-journal-data.csv' + '<br/>' + 'Size: 192.012 KiB (196620 bytes)';
+			fileInfo.innerHTML += 'File name: educational-assessment-journal-data.csv' + '<br/>' + 'Size: 192.012 KiB (196620 bytes)';
 			resetAlertFile()
 			doSamples(rawDataForRenderIn, 'Week', 'Text')
 		})
 	} else {
 		d3.tsv(path, function (err, rawDataForRenderIn) {
 			fileInfo.innerHTML = '';
-			fileInfo.innerHTML += 'File name: maker_Cards_Fries_Text.tsv' + '<br/>' + 'Size: 1.434 MiB (1503230 bytes)';
+			fileInfo.innerHTML += 'File name: protein-pathway-data.tsv' + '<br/>' + 'Size: 1.434 MiB (1503230 bytes)';
 			resetAlertFile()
 			doSamples(rawDataForRenderIn, 'Year', 'Title')
 		})
