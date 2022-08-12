@@ -51,6 +51,7 @@ const firstRow = document.getElementById('first-row'), secondRow = document.getE
 const fileInfo = document.getElementById('file-info');
 const previewData = document.getElementById('preview-data');
 const loading = d3.select("#loading");
+const wsLoading = d3.select("#ws-loading");
 const alertField = d3.select("#alert-field");
 const sample_fries = d3.select("#pathway")
 	.on("click", function () {
@@ -65,33 +66,64 @@ d3.select("#education")
 
 filepicker.addEventListener("change", handleFiles, false);
 
-visTrigger.addEventListener("click", () => {
-	let result = checkInput();
-	if (!!result){
-		timeCol = result.Time;
-		textCol = result.Text;
+d3.select("#vis-trigger")
+	.on("click", () => {
+		let result = checkInput();
+		if (!!result){
+			timeCol = result.Time;
+			textCol = result.Text;
 
-		if (sampleFlag){
-			dataForNLP = dataForRender.map(d => {
-				return {
-					Time: d[timeCol],
-					Text: d[textCol],
-				}
-			});
+			if (sampleFlag){
+				dataForNLP = dataForRender.map(d => {
+					return {
+						Time: d[timeCol],
+						Text: d[textCol],
+					}
+				});
+			}
+			else {
+				dataForNLP = window[type + 'Read'](dataForRender, false);  // retrieve time and text columns out of that data
+			}
+			showLoader()
+			const myTimeout = setTimeout(myGreeting, 100);
+			visTrigger.setAttribute("href", "#wordstream");
+			function myGreeting() {
+				dataForVis = textProcessing(dataForNLP);
+				visualize(dataForVis);
+			}
 		}
-		else {
-			dataForNLP = window[type + 'Read'](dataForRender, false);  // retrieve time and text columns out of that data
+		else{
+			visTrigger.setAttribute("href", "#");
 		}
-		showVis()
-		visTrigger.setAttribute("href", "#wordstream");
-		dataForVis = textProcessing(dataForNLP);
-		visualize(dataForVis);
-	}
-	else{
-		hideVis()
-		visTrigger.setAttribute("href", "#");
-	}
-})
+	})
+
+// visTrigger.addEventListener("click", () => {
+// 	let result = checkInput();
+// 	if (!!result){
+// 		timeCol = result.Time;
+// 		textCol = result.Text;
+//
+// 		if (sampleFlag){
+// 			dataForNLP = dataForRender.map(d => {
+// 				return {
+// 					Time: d[timeCol],
+// 					Text: d[textCol],
+// 				}
+// 			});
+// 		}
+// 		else {
+// 			dataForNLP = window[type + 'Read'](dataForRender, false);  // retrieve time and text columns out of that data
+// 		}
+// 		showVis()
+// 		showLoader();console.log(new Date);
+// 		visTrigger.setAttribute("href", "#wordstream");
+// 		dataForVis = textProcessing(dataForNLP);
+// 		visualize(dataForVis);
+// 	}
+// 	else{
+// 		visTrigger.setAttribute("href", "#");
+// 	}
+// })
 
 d3.select("#textColName").on("change", function () {
 	hideVis()
