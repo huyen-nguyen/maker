@@ -25,25 +25,27 @@
 <body class="d-flex flex-column h-100">
 <main class="flex-shrink-0">
 	<!-- Navigation-->
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-between">
 		<div class="container px-5">
-			<a class="navbar-brand" href="index.html">WordStream Maker</a>
-			<button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
-					class="navbar-toggler" data-bs-target="#navbarSupportedContent"
-					data-bs-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-					<li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-					<li class="nav-item"><a class="nav-link" href="#gallery">Gallery</a></li>
-					<li class="nav-item"><a class="nav-link" href="https://github.com/huyen-nguyen/maker"
-											target="_blank">GitHub</a></li>
-					<li class="nav-item"><a class="nav-link" href="https://arxiv.org/pdf/2209.11856.pdf"
-											target="_blank">Paper</a></li>
-				</ul>
-			</div>
+		<a class="navbar-brand" href="#">WordStream Maker</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNavDropdown">
+			<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+				<li class="nav-item active">
+					<a class="nav-link" href="#">Home <span class="sr-only"></span></a>
+				</li>
+				<li class="nav-item"><a class="nav-link" href="#gallery">Gallery</a></li>
+				<li class="nav-item"><a class="nav-link" href="https://github.com/huyen-nguyen/maker"
+										target="_blank">GitHub</a></li>
+				<li class="nav-item"><a class="nav-link" href="https://arxiv.org/pdf/2209.11856.pdf"
+										target="_blank">Paper</a></li>
+			</ul>
+		</div>
 		</div>
 	</nav>
+
 	<!-- Header-->
 	<header class="bg-dark py-5">
 
@@ -134,7 +136,7 @@
 		<div class="container px-5 my-5" id="stage-2">
 			<div class="row gx-5">
 				<div class="col-lg-2 mb-5 mb-lg-3"><h2 class="fw-bolder mb-3">WordStream</h2></div>
-				<div id="ws-placeholder-div"><img id="wsph" src="assets/WordStreamplaceholder2.png"></div>
+				<div id="ws-placeholder-div"><img id="wsph" class="img-fluid"  src="assets/WordStreamplaceholder2.png"></div>
 				<div id="loading-container">
 					<div class="loadingio-spinner-double-ring-4dols36ufwg" id="ws-loading">
 						<div class="ldio-6pd26u1x99x">
