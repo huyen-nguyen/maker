@@ -265,3 +265,41 @@ code{
 #controlPanel{
 	display: none;
 }
+
+.intro-gallery{
+	color: #b7b7b7;
+	font-style: italic;
+}
+
+.card img{
+	padding: 0.5rem;
+}
+
+.card{
+	border-color: rgba(122, 128, 126, 0.8);
+	transition: 0.2s;
+}
+
+.card:hover{
+	box-shadow: 0 0 12px rgba(176, 176, 176, 0.76);
+}
+
+.card-footer form{
+	display: inline-block;
+}
+
+#gallery{
+	background-color: #2b5b5b;
+}
+
+.card-body p a{
+	color: gray;
+}
+
+#wsph{
+	width: 500px;
+}
+
+#ws-placeholder-div{
+	text-align: center;
+}

@@ -69,6 +69,7 @@ filepicker.addEventListener("change", handleFiles, false);
 d3.select("#vis-trigger")
 	.on("click", () => {
 		let result = checkInput();
+		d3.select("#ws-placeholder-div").remove()
 		if (!!result){
 			timeCol = result.Time;
 			textCol = result.Text;
