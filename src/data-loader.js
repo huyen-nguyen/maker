@@ -260,28 +260,28 @@ function resetInputFields(){
 
 // Read input file using different parsers. List functions here.
 
-function csvRead(rawData, first) { // raw mean the first time running csvRead on this file
-	if (first){
-		return d3.csvParse(rawData);
-	}
-	else return (rawData).map(d => {
+function csvRead(rawData, raw) {
+	return d3.csvParse(rawData).map(d => {
+		if (raw) {
+			return d;
+		}
 		return {
 			Time: d[timeCol],
 			Text: d[textCol],
 		}
-	})
+	});
 }
 
-function tsvRead(rawData, first) {
-	if (first){
-		return d3.tsvParse(rawData);
-	}
-	else return (rawData).map(d => {
+function tsvRead(rawData, raw) {
+	return d3.tsvParse(rawData).map(d => {
+		if (raw) {
+			return d;
+		}
 		return {
 			Time: d[timeCol],
 			Text: d[textCol],
 		}
-	})
+	});
 }
 
 function updateSize(file) {
