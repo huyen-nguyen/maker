@@ -55,11 +55,13 @@ const wsLoading = d3.select("#ws-loading");
 const alertField = d3.select("#alert-field");
 const sample_fries = d3.select("#pathway")
 	.on("click", function () {
+		d3.event.preventDefault();
 		sampleFlag = true;
 		handleSamples("data/protein-pathway-data.tsv")
 	});
 d3.select("#education")
 	.on("click", function () {
+		d3.event.preventDefault();
 		sampleFlag = true;
 		handleSamples("data/educational-assessment-journal-data.csv")
 	});
@@ -68,6 +70,7 @@ filepicker.addEventListener("change", handleFiles, false);
 
 d3.select("#vis-trigger")
 	.on("click", () => {
+		d3.event.preventDefault();
 		let result = checkInput();
 		d3.select("#ws-placeholder-div").remove()
 		if (!!result){
@@ -87,14 +90,13 @@ d3.select("#vis-trigger")
 			}
 			showLoader()
 			const myTimeout = setTimeout(myGreeting, 100);
-			visTrigger.setAttribute("href", "#wordstream");
 			function myGreeting() {
 				dataForVis = textProcessing(dataForNLP);
 				visualize(dataForVis);
 			}
 		}
 		else{
-			visTrigger.setAttribute("href", "#");
+			visTrigger.removeAttribute("href");
 		}
 	})
 

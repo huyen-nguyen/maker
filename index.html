@@ -21,6 +21,18 @@
 	<script defer src="lib/bundle.js"></script>
 	<script src="lib/wordstream.js"></script>
 	<script src="src/const.js"></script>
+	<script>
+		if ("scrollRestoration" in history) {
+			history.scrollRestoration = "manual";
+		}
+
+		window.addEventListener("load", function () {
+			if (window.location.hash) {
+				history.replaceState(null, document.title, window.location.pathname + window.location.search);
+			}
+			window.scrollTo(0, 0);
+		});
+	</script>
 </head>
 <body class="d-flex flex-column h-100">
 <main class="flex-shrink-0">
@@ -204,7 +216,7 @@
 			<div class="col-sm">
 				<div class="card mb-4 border-1">
 					<a href="https://idatavisualizationlab.github.io/WordStream/" target="_blank">
-						<img src="https://i.imgur.com/5AKnurd.png" class="card-img-top" alt="Original WordStream">
+						<img src="assets/gallery/original-wordstream.png" class="card-img-top" alt="Original WordStream">
 					</a>
 					<div class="card-body">
 						<h5 class="card-title">WordStream: Interactive Visualization for Topic Evolution</h5>
@@ -224,7 +236,7 @@
 				</div>
 				<div class="card mb-4 border-1">
 					<a href="https://link.springer.com/article/10.1007/s12665-020-8851-6" target="_blank">
-						<img src="https://i.imgur.com/TLp5BDh.png" class="card-img-top"
+						<img src="assets/gallery/ogallala.png" class="card-img-top"
 							 alt="Visualizing groundwater availability of Ogallala Aquifer, USA">
 					</a>
 					<div class="card-body">
@@ -301,7 +313,7 @@
 			<div class="col-sm">
 				<div class="card mb-4 border-1">
 					<a href="https://huyen-nguyen.github.io/grc/wordstream.html" target="_blank">
-						<img src="https://i.imgur.com/et00nl9.png" class="card-img-top" alt="Visualizing Qualitative Data: Educational Assessment">
+						<img src="assets/gallery/educational-assessment.png" class="card-img-top" alt="Visualizing Qualitative Data: Educational Assessment">
 					</a>
 					<div class="card-body">
 						<h5 class="card-title">Visualizing Qualitative Data: Educational Assessment</h5>
@@ -322,7 +334,7 @@
 				</div>
 				<div class="card mb-4 border-1">
 					<a href="https://huyennguyen.com/assets/papers/2019-HackerNets-BigData.pdf" target="_blank">
-						<img src="https://i.imgur.com/haV9I7L.png" class="card-img-top" alt="Visualizing Qualitative Data: Educational Assessment">
+						<img src="assets/gallery/iot-media-conversations.png" class="card-img-top" alt="Visualizing Qualitative Data: Educational Assessment">
 					</a>
 					<div class="card-body">
 						<h5 class="card-title">Media Conversations on IoT</h5>
@@ -404,7 +416,7 @@
 			<div class="col-sm">
 				<div class="card mb-4 border-1">
 					<a href="https://idatavisualizationlab.github.io/VAST2019mc3/" target="_blank">
-						<img src="https://i.imgur.com/oHdcIPS.png" class="card-img-top" alt="VAST2019mc3">
+						<img src="assets/gallery/vast2019mc3.png" class="card-img-top" alt="VAST2019mc3">
 					</a>
 					<div class="card-body">
 						<h5 class="card-title">Earthquake Situational Analytics</h5>
