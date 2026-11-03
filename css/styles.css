@@ -237,10 +237,6 @@ table td, table th{
 }
 
 /* stage 2 --- visualizerrr */
-#canvas{
-	/*max-width: 1500px;*/
-	/*overflow-y: scroll;*/
-}
 
 #canvasContainer{
 	display:none;
